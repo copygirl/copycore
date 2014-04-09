@@ -1,0 +1,17 @@
+/.gradle/
+/.settings/
+/gradle/
+/eclipse/
+/build/
+/bin/
+
+/.classpath
+/.project
+/gradlew
+/gradlew.bat
+
+# Project related files
+# Currently not included
+/downloads/
+/models/
+/images/
