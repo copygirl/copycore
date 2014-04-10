@@ -8,11 +8,11 @@ public final class ClientUtils {
 	
 	private ClientUtils() {  }
 	
-	public EntityPlayer getLocalPlayer() {
+	public static EntityPlayer getLocalPlayer() {
 		return Minecraft.getMinecraft().thePlayer;
 	}
 	
-	public World getLocalWorld() {
+	public static World getLocalWorld() {
 		return Minecraft.getMinecraft().theWorld;
 	}
 	
