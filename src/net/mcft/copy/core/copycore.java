@@ -1,13 +1,12 @@
 package net.mcft.copy.core;
 
 import net.mcft.copy.core.proxy.CommonProxy;
-import net.mcft.copy.core.handler.ModelReloader;
 
 import org.apache.logging.log4j.Logger;
 
 import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.Mod.EventHandler;
+import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 

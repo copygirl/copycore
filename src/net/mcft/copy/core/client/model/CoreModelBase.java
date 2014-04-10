@@ -1,12 +1,5 @@
 package net.mcft.copy.core.client.model;
 
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
-import net.mcft.copy.core.client.renderer.ITextureProvider;
 import net.mcft.copy.core.handler.ModelReloader;
 import net.mcft.copy.core.handler.ModelReloader.IReloadableModel;
 import net.minecraft.client.model.ModelBase;
@@ -15,6 +8,12 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.AdvancedModelLoader;
 import net.minecraftforge.client.model.IModelCustom;
+
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class CoreModelBase extends ModelBase implements IReloadableModel {
