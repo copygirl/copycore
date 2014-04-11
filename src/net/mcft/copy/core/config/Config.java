@@ -2,6 +2,7 @@ package net.mcft.copy.core.config;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,13 +16,25 @@ import net.minecraftforge.common.config.Configuration;
 
 public class Config {
 	
+	private static final Map<String, Config> allConfigs = new HashMap<String, Config>();
+	
+	/** Returns a collection of all copycore managed configs. */
+	public static Collection<Config> getAllConfigs() { return allConfigs.values(); }
+	
+	/** Returns a config by its ID, null if there isn't one. */
+	public static Config getConfigById(String id) { return allConfigs.get(id); }
+	
+	
+	public final String id;
 	private final Configuration forgeConfig;
 	
 	private final Map<String, Setting> settings = new HashMap<String, Setting>();
 	private final List<Setting> syncedSettings = new ArrayList<Setting>();
 	
-	public Config(File file) {
+	public Config(String id, File file) {
+		this.id = id;
 		forgeConfig = new Configuration(file);
+		allConfigs.put(id, this);
 	}
 	
 	/** Adds a setting to the config. */
@@ -68,11 +81,12 @@ public class Config {
 		for (Setting setting : syncedSettings)
 			setting.read(compound);
 	}
-	/** Writes all synced settings to the
-	 *  compound to be sent to the client. */
-	public void write(NBTTagCompound compound) {
+	/** Writes all synced settings to the compound
+	 *  to be sent to the client and returns it. */
+	public NBTTagCompound write(NBTTagCompound compound) {
 		for (Setting setting : syncedSettings)
 			setting.write(compound);
+		return compound;
 	}
 	
 }
