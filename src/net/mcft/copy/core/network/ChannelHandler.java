@@ -44,7 +44,7 @@ public class ChannelHandler extends FMLIndexedMessageToMessageCodec<AbstractPack
 			                           packet.getClass().getSimpleName(), t);
 			return;
 		}
-		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
+		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
 			INetHandler netHandler = context.channel().attr(NetworkRegistry.NET_HANDLER).get();
 			EntityPlayer player = ((NetHandlerPlayServer)netHandler).playerEntity;
 			packet.handleServerSide(player);
