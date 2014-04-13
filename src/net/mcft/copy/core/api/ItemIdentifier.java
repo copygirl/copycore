@@ -14,6 +14,11 @@ public class ItemIdentifier {
 	private int hashCode;
 	private boolean calculatedHashCode = false;
 	
+	// Since, in my opinion, null data and an empty compound are
+	// equivalent, ItemIdentifiers should not be created with an
+	// empty compound. Otherwise, hashcodes might not match even
+	// though equals returns true.
+	
 	public ItemIdentifier(Item item, int damage, NBTTagCompound data) {
 		this.item = item;
 		this.damage = damage;
@@ -21,9 +26,11 @@ public class ItemIdentifier {
 	}
 	public ItemIdentifier(ItemStack stack) {
 		this(stack.getItem(), Items.diamond.getDamage(stack),
-		     (stack.hasTagCompound() ? (NBTTagCompound)stack.getTagCompound().copy() : null));
+		     ((stack.hasTagCompound() && !stack.getTagCompound().hasNoTags())
+		    		 ? (NBTTagCompound)stack.getTagCompound().copy() : null));
 	}
 	
+	/** Creates an item stack from the identifier with the specified stack size. */
 	public ItemStack createStack(int size) {
 		ItemStack stack = new ItemStack(item, size, damage);
 		if (data != null)
@@ -31,11 +38,15 @@ public class ItemIdentifier {
 		return stack;
 	}
 	
+	/** Returns if the identifier matches this item, damage and NBT data. */
 	public boolean matches(Item item, int damage, NBTTagCompound data) {
 		return ((item == this.item) && (damage == this.damage) &&
-		        ((data == this.data) || ((data != null) && data.equals(this.data))));
+		        ((data == null) ? (this.data == null)
+		                        : ((this.data == null) ? data.hasNoTags()
+		                                               : data.equals(this.data))));
 	}
 	
+	/** Returns if the identifier matches this item stack. */
 	public boolean matches(ItemStack stack) {
 		return matches(stack.getItem(), Items.diamond.getDamage(stack), stack.getTagCompound());
 	}
