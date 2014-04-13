@@ -3,6 +3,7 @@ package net.mcft.copy.core;
 import net.mcft.copy.core.network.ChannelHandler;
 import net.mcft.copy.core.network.packet.PacketSyncSettings;
 import net.mcft.copy.core.proxy.CommonProxy;
+import net.mcft.copy.core.tweak.TweakAutoReplace;
 
 import org.apache.logging.log4j.Logger;
 
@@ -53,6 +54,8 @@ public class copycore
 	public void init(FMLInitializationEvent event) {
 		
 		proxy.init();
+		
+		TweakAutoReplace.instance.enable();
 		
 	}
 	
