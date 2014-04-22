@@ -1,5 +1,7 @@
 package net.mcft.copy.core.util;
 
+import java.util.List;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagByte;
@@ -89,14 +91,23 @@ public final class NbtUtils {
 		return list;
 	}
 	
-	/** Reads items from an NBT list to an item stack array. */
-	public static void readItems(NBTTagList list, ItemStack[] items) {
+	/** Reads items from an NBT list to an item stack array.
+	 *  Any items falling outside the range of the items array
+	 *  will get added to the invalid list if that's non-null. */
+	public static void readItems(NBTTagList list, ItemStack[] items, List<ItemStack> invalid) {
 		for (int i = 0; i < list.tagCount(); i++) {
 			NBTTagCompound compound = list.getCompoundTagAt(i);
 			int index = compound.getShort("index");
 			ItemStack stack = readItem(compound.getCompoundTag("stack"));
-			items[index] = stack;
+			if ((index >= 0) || (index < items.length))
+				items[index] = stack;
+			else if (invalid != null)
+				invalid.add(stack);
 		}
+	}
+	/** Reads items from an NBT list to an item stack array. */
+	public static void readItems(NBTTagList list, ItemStack[] items) {
+		readItems(list, items, null);
 	}
 	
 }
