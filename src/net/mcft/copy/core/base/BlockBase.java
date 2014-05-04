@@ -1,0 +1,51 @@
+package net.mcft.copy.core.base;
+
+import net.mcft.copy.core.misc.rotatable.IRotatableBounds;
+import net.mcft.copy.core.util.NameUtils;
+import net.mcft.copy.core.util.RegistryUtils.IRegistrable;
+import net.mcft.copy.core.util.RotationUtils;
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.world.IBlockAccess;
+import cpw.mods.fml.common.registry.GameRegistry;
+
+public class BlockBase extends Block implements IRegistrable {
+	
+	private String name;
+	
+	public BlockBase(Material material) {
+		super(material);
+	}
+	
+	/** Returns the name of this block, called only once when the block
+	 *  is registered and then used as a return value in getBlockName. */
+	protected String getBlockNameInternal() {
+		return NameUtils.getGameItemName(this);
+	}
+	
+	/** Returns the item class used to register this block with. */
+	public Class<? extends ItemBlock> getItemClass() { return ItemBlock.class; }
+	
+	@Override
+	public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y, int z) {
+		if (this instanceof IRotatableBounds)
+			RotationUtils.setBlockBoundsFromRotation(this, world, x, y, z);
+	}
+	
+	// IRegistrable implementation
+	
+	@Override
+	public String getName() {
+		return ((name == null) ? getBlockNameInternal() : name);
+	}
+	
+	/** Registers the block in the GameRegistry, as well as sets the block name. */
+	@Override
+	public <T extends IRegistrable> T register() {
+		setBlockName(getName());
+		GameRegistry.registerBlock(this, getItemClass(), getName());
+		return (T)this;
+	}
+	
+}

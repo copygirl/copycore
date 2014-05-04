@@ -56,6 +56,11 @@ public class Config {
 	/** Returns the value of a boolean setting with that name. */
 	public boolean getBoolean(String name) { return ((BooleanSetting)get(name)).getValue(); }
 	
+	/** Adds a custom comment to a category. */
+	public void addCategoryComment(String category, String comment) {
+		forgeConfig.addCustomCategoryComment(category, comment);
+	}
+	
 	/** Loads settings from the config file. */
 	public void load() {
 		forgeConfig.load();
