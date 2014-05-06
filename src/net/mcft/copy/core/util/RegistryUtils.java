@@ -4,10 +4,17 @@ import java.util.Arrays;
 
 import net.mcft.copy.core.config.Config;
 import net.mcft.copy.core.config.setting.BooleanSetting;
+import cpw.mods.fml.common.Loader;
 
 public final class RegistryUtils {
 	
 	private RegistryUtils() {  }
+	
+	/** Returns the mod ID of the currently active mod.
+	 *  <b>Warning:</b> Only use during FML events preinit, init, postinit and similar. */
+	public static String getActiveModId() {
+		return Loader.instance().activeModContainer().getModId();
+	}
 	
 	/** Returns if all the required objects are enabled. */
 	public static boolean isEnabled(Object... required) {
