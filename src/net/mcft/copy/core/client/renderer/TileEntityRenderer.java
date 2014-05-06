@@ -46,14 +46,15 @@ public class TileEntityRenderer extends TileEntitySpecialRenderer {
 		if (model == null) return;
 		
 		GL11.glPushMatrix();
-
+		
 		GL11.glTranslated(x + 0.5, y, z + 0.5);
 		
 		// Rotate any IRotatable automatically
 		if ((tileEntity.getBlockType() instanceof IRotatable4)) {
 			IRotatable4 rotatable = ((IRotatable4)tileEntity.getBlockType());
-			ForgeDirection dir = (!tileEntity.isInvalid() ? rotatable.getDirection(BlockLocation.get(tileEntity))
-			                                              : ForgeDirection.NORTH);
+			ForgeDirection dir = ((tileEntity.getWorldObj() != null)
+					? rotatable.getDirection(BlockLocation.get(tileEntity))
+					: ForgeDirection.WEST);
 			float rot = DirectionUtils.getRotation(dir) + 180;
 			GL11.glRotatef(rot, 0, -1, 0);
 		}

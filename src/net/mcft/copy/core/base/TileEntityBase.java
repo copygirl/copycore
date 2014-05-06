@@ -68,7 +68,7 @@ public abstract class TileEntityBase extends TileEntity {
 	/** Called before the tile entity is being rendered as an item,
 	 *  allows setting values in the tile entity, which is then rendered. */
 	@SideOnly(Side.CLIENT)
-	public void onBlockRenderAsItem(ItemStack stack) {  }
+	public void onRenderAsItem(ItemStack stack) {  }
 	
 	// Loading, saving and syncing
 	
