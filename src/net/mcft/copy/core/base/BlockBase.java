@@ -18,9 +18,8 @@ public class BlockBase extends Block implements IRegistrable {
 		super(material);
 	}
 	
-	/** Returns the name of this block, called only once when the block
-	 *  is registered and then used as a return value in getBlockName. */
-	protected String getBlockNameInternal() {
+	/** Called only once, then used as a return value in getName(). */
+	protected String getNameInternal() {
 		return NameUtils.getGameItemName(this);
 	}
 	
@@ -37,7 +36,7 @@ public class BlockBase extends Block implements IRegistrable {
 	
 	@Override
 	public String getName() {
-		return ((name == null) ? getBlockNameInternal() : name);
+		return ((name == null) ? getNameInternal() : name);
 	}
 	
 	/** Registers the block in the GameRegistry, as well as sets the block name. */

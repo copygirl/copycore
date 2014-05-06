@@ -25,7 +25,7 @@ public final class NameUtils {
 	/** Gets the "game name" of a game object from its class name. <br>
 	 *  For example: <code>BlockCraftingStation</code> => <code>crafting_station</code> */
 	public static String getGameItemName(Object object) {
-		return getName(object.getClass());
+		return getGameItemName(object.getClass());
 	}
 	/** Gets the "game name" from this class' name. <br>
 	 *  For example: <code>BlockCraftingStation</code> => <code>crafting_station</code> */
