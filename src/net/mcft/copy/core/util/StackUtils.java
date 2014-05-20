@@ -16,6 +16,21 @@ public final class StackUtils {
 		return Items.diamond.getDamage(stack);
 	}
 	
+	/** Copies an item stack with a certain stack size. <br>
+	 *  If checkSize is true, a stack size of 0 or smaller will return null. */
+	public static ItemStack copy(ItemStack stack, int stackSize, boolean checkSize) {
+		if ((stack == null) ||
+		    (checkSize && (stackSize <= 0))) return null;
+		ItemStack copy = stack.copy();
+		copy.stackSize = stackSize;
+		return copy;
+	}
+	/** Copies an item stack with a certain stack size. <br>
+	 *  A stack size of 0 or smaller will return null. */
+	public static ItemStack copy(ItemStack stack, int stackSize) {
+		return copy(stack, stackSize, true);
+	}
+	
 	// Matching related functions
 	
 	/** Returns if the two item stacks are equal.
