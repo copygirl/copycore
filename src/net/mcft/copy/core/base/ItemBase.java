@@ -27,7 +27,7 @@ public class ItemBase extends Item implements IRegistrable {
 		return ((name == null) ? getNameInternal() : name);
 	}
 	
-	/** Registers the block in the GameRegistry, as well as sets the block name. */
+	/** Registers the item in the GameRegistry, as well as sets the item name. */
 	@Override
 	public <T extends IRegistrable> T register() {
 		setUnlocalizedName(getName());
