@@ -39,7 +39,7 @@ public class ChannelHandler extends FMLIndexedMessageToMessageCodec<AbstractPack
 	public void decodeInto(ChannelHandlerContext context, ByteBuf source, AbstractPacket packet) {
 		try {
 			packet.decode(context, new PacketBuffer(source));
-		} catch (Throwable t) {
+		} catch (Exception t) {
 			copycore.getLogger().error("Error decoding packet '%s': %s",
 			                           packet.getClass().getSimpleName(), t);
 			return;
