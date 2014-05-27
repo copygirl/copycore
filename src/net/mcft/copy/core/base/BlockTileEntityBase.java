@@ -66,6 +66,13 @@ public abstract class BlockTileEntityBase extends BlockBase implements ITileEnti
 		return ((tileEntity != null) ? tileEntity.onPickBlock(defaultBlock, target) : defaultBlock);
 	}
 	
+	@Override
+	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player,
+	                                int side, float hitX, float hitY, float hitZ) {
+		return getTileEntity(world, x, y, z).onBlockActivated(
+				player, ForgeDirection.getOrientation(side), hitX, hitY, hitZ);
+	}
+	
 	// ITileEntityProvider implementation
 	
 	@Override
