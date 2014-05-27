@@ -46,7 +46,6 @@ public class CoreModelBase extends ModelBase implements IReloadableModel {
 		
 		GL11.glPushMatrix();
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-		GL11.glColor4f(1, 1, 1, 1);
 		GL11.glTranslated(x, y, z);
 		
 		renderModel(entity, partialTick);

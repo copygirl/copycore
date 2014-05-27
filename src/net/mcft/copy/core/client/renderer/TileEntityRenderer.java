@@ -1,5 +1,6 @@
 package net.mcft.copy.core.client.renderer;
 
+import net.mcft.copy.core.client.Color;
 import net.mcft.copy.core.client.model.CoreModelBase;
 import net.mcft.copy.core.misc.BlockLocation;
 import net.mcft.copy.core.misc.rotatable.IRotatable4;
@@ -25,23 +26,47 @@ public class TileEntityRenderer extends TileEntitySpecialRenderer {
 		this.defaultModel = defaultModel;
 	}
 	
-	private CoreModelBase getModel(TileEntity tileEntity) {
+	
+	/** Returns the model for this tile entity.
+	 *  Falls back back to the default model if the tile entity
+	 *  is not a model provider or it returns null as a model. */
+	protected CoreModelBase getModel(TileEntity tileEntity) {
 		CoreModelBase model = null;
 		if (tileEntity instanceof IModelProvider)
 			model = ((IModelProvider)tileEntity).getModel();
 		return ((model != null) ? model : defaultModel);
 	}
 	
-	private ResourceLocation getTexture(TileEntity tileEntity) {
+	/** Returns the render passes for this tile entity.
+	 *  Falls back to 1 if the tile entity is not a texture provider. */
+	protected int getRenderPasses(TileEntity tileEntity) {
+		if (tileEntity instanceof ITextureProvider)
+			return ((ITextureProvider)tileEntity).getRenderPasses();
+		return 1;
+	}
+	
+	/** Returns the color for this tile entity and render pass.
+	 *  Falls back back to the default texture if the tile entity
+	 *  is not a texture provider or it returns null as a model. */
+	protected Color getColor(TileEntity tileEntity, int pass) {
+		if (tileEntity instanceof ITextureProvider)
+			return ((ITextureProvider)tileEntity).getColor(pass);
+		return Color.WHITE;
+	}
+	
+	/** Returns the texture for this tile entity and render pass.
+	 *  Falls back back to the default texture if the tile entity
+	 *  is not a texture provider or it returns null as a model. */
+	protected ResourceLocation getTexture(TileEntity tileEntity, int pass) {
 		ResourceLocation texture = null;
 		if (tileEntity instanceof ITextureProvider)
-			texture = ((ITextureProvider)tileEntity).getTexture();
+			texture = ((ITextureProvider)tileEntity).getTexture(pass);
 		return ((texture != null) ? texture : defaultTexture);
 	}
 	
+	
 	@Override
 	public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float partialTick) {
-		bindTexture(getTexture(tileEntity));
 		CoreModelBase model = getModel(tileEntity);
 		if (model == null) return;
 		
@@ -59,9 +84,17 @@ public class TileEntityRenderer extends TileEntitySpecialRenderer {
 			GL11.glRotatef(rot, 0, -1, 0);
 		}
 		
-		model.render(tileEntity, 0, 0, 0, partialTick);
+		for (int pass = 0; pass < getRenderPasses(tileEntity); pass++) {
+			bindTexture(getTexture(tileEntity, pass));
+			getColor(tileEntity, pass).setActiveGLColor();
+			render(tileEntity, model, partialTick);
+		}
 		
 		GL11.glPopMatrix();
+	}
+	
+	public void render(TileEntity tileEntity, CoreModelBase model, float partialTick) {
+		model.render(tileEntity, 0, 0, 0, partialTick);
 	}
 	
 }
