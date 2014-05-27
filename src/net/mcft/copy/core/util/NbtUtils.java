@@ -18,10 +18,15 @@ import net.minecraft.nbt.NBTTagString;
 
 public final class NbtUtils {
 	
+	public static final String TAG_INDEX = "index";
+	public static final String TAG_STACK = "stack";
+	
 	private NbtUtils() {  }
 	
 	/** Returns the primitive value of a tag, casted to the return type. */
 	public static <T> T getTagValue(NBTBase tag) {
+		if (tag == null)
+			throw new IllegalArgumentException("tag is null");
 		if (tag instanceof NBTTagByte)      return (T)(Object)((NBTTagByte)tag).func_150290_f();
 		if (tag instanceof NBTTagShort)     return (T)(Object)((NBTTagShort)tag).func_150289_e();
 		if (tag instanceof NBTTagInt)       return (T)(Object)((NBTTagInt)tag).func_150287_d();
@@ -31,11 +36,15 @@ public final class NbtUtils {
 		if (tag instanceof NBTTagString)    return (T)((NBTTagString)tag).func_150285_a_();
 		if (tag instanceof NBTTagByteArray) return (T)((NBTTagByteArray)tag).func_150292_c();
 		if (tag instanceof NBTTagIntArray)  return (T)((NBTTagIntArray)tag).func_150302_c();
-		return null;
+		throw new IllegalArgumentException(NBTBase.NBTTypes[tag.getId()] + " isn't a primitive NBT tag");
 	}
 	
-	/** Creates and returns a primitive NBT tag from a value. */
+	/** Creates and returns a primitive NBT tag from a value.
+	 *  If the value already is an NBT tag, it is returned instead. */
 	public static NBTBase createTag(Object value) {
+		if (value == null)
+			throw new IllegalArgumentException("value is null");
+		if (value instanceof NBTBase) return (NBTBase)value;
 		if (value instanceof Byte)    return new NBTTagByte((Byte)value);
 		if (value instanceof Short)   return new NBTTagShort((Short)value);
 		if (value instanceof Integer) return new NBTTagInt((Integer)value);
@@ -45,7 +54,7 @@ public final class NbtUtils {
 		if (value instanceof String)  return new NBTTagString((String)value);
 		if (value instanceof byte[])  return new NBTTagByteArray((byte[])value);
 		if (value instanceof int[])   return new NBTTagIntArray((int[])value);
-		return null;
+		throw new IllegalArgumentException("Can't create an NBT tag of value: " + value);
 	}
 	
 	
@@ -86,8 +95,8 @@ public final class NbtUtils {
 		for (int i = 0; i < items.length; i++)
 			if (items[i] != null)
 				list.appendTag(createCompound(
-						"index", (short)i,
-						"stack", writeItem(items[i])));
+						TAG_INDEX, (short)i,
+						TAG_STACK, writeItem(items[i])));
 		return list;
 	}
 	
@@ -97,8 +106,8 @@ public final class NbtUtils {
 	public static void readItems(NBTTagList list, ItemStack[] items, List<ItemStack> invalid) {
 		for (int i = 0; i < list.tagCount(); i++) {
 			NBTTagCompound compound = list.getCompoundTagAt(i);
-			int index = compound.getShort("index");
-			ItemStack stack = readItem(compound.getCompoundTag("stack"));
+			int index = compound.getShort(TAG_INDEX);
+			ItemStack stack = readItem(compound.getCompoundTag(TAG_STACK));
 			if ((index >= 0) || (index < items.length))
 				items[index] = stack;
 			else if (invalid != null)
