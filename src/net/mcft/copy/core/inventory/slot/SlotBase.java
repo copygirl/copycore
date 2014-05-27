@@ -61,9 +61,12 @@ public class SlotBase extends Slot {
 	public ItemStack onClick(EntityPlayer player, ItemStack holding, boolean rightclick) {
 		if (holding == null) {
 			ItemStack stack = getStack();
-			int amount = Math.min(stack.stackSize, stack.getMaxStackSize());
-			if (rightclick) amount /= 2;
-			return take(player, amount);
+			if (stack != null) {
+				int amount = (rightclick ? (stack.stackSize / 2) : stack.stackSize);
+				amount = Math.min(Math.min(amount, stack.getMaxStackSize()),
+				                  player.inventory.getInventoryStackLimit());
+				return take(player, amount);
+			} else return null;
 		} else if (!rightclick)
 			return insert(player, holding);
 		else if (insert(player, StackUtils.copy(holding, 1)) == null)
