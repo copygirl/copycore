@@ -32,7 +32,9 @@ public abstract class AbstractInventory implements IInventoryEnumerable {
 	@Override
 	public ItemStack getStackInSlotOnClosing(int slot) { return null; }
 	@Override
-	public boolean isItemValidForSlot(int slot, ItemStack stack) { return true; }
+	public boolean isItemValidForSlot(int slot, ItemStack stack) {
+		return ((stack == null) || (stack.stackSize < getInventoryStackLimit()));
+	}
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer player) { return true; }
 	
