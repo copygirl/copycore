@@ -48,6 +48,7 @@ public class ItemIdentifier {
 	
 	/** Returns if the identifier matches this item stack. */
 	public boolean matches(ItemStack stack) {
+		if (stack == null) return false;
 		return matches(stack.getItem(), Items.diamond.getDamage(stack), stack.getTagCompound());
 	}
 	
