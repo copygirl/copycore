@@ -19,11 +19,11 @@ public class SlotGroup implements IEnumerable<SlotBase> {
 		try {
 			Constructor<? extends SlotBase> constructor =
 					slotClass.getConstructor(IInventory.class, int.class, int.class, int.class);
-			for (int i = 0; i < columns; i++)
-				for (int j = 0; j < rows; j++) {
+			for (int j = 0; j < rows; j++)
+				for (int i = 0; i < columns; i++) {
 					int index = startIndex + i + j * columns;
-					int xx = x + i * 16;
-					int yy = y + j * 16;
+					int xx = x + i * 18;
+					int yy = y + j * 18;
 					add(constructor.newInstance(inventory, index, xx, yy));
 				}
 		} catch (Exception e) { e.printStackTrace(); }
