@@ -17,7 +17,7 @@ public final class EntityUtils {
 	public static String getIdentifier(Class<? extends IExtendedEntityProperties> propertiesClass) {
 		String identifier = propertiesLookup.get(propertiesClass);
 		if (identifier == null) {
-			try { identifier = (String)propertiesClass.getField("identifier").get(null); }
+			try { identifier = (String)propertiesClass.getField("IDENTIFIER").get(null); }
 			catch (Exception e) { throw new Error(e); }
 			propertiesLookup.put(propertiesClass, identifier);
 		}
