@@ -159,7 +159,7 @@ public class BlockLocation {
 	
 	@Override
 	public String toString() {
-		return String.format("[%s, Coords=%s,%s,%s]", getWorldName(), x, y, z);
+		return String.format("[%s; Coords=%s,%s,%s]", getWorldName(), x, y, z);
 	}
 	
 	// Helper functions
