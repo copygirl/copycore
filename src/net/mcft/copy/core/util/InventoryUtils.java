@@ -24,10 +24,11 @@ public final class InventoryUtils {
 	/** Returns an enumerable that will look for places to insert an item into.
 	 *  First it will look for stacks of the same type as the item and return those.
 	 *  While doing so it will keep track of a list of empty slots and return those afterwards. */
-	public static IEnumerable<Element> lookupSpaceFor(final IInventory inventory, final ItemIdentifier item) {
+	public static IEnumerable<Element> lookupSpaceFor(final IInventory inventory, final ItemIdentifier item,
+	                                                  final int maxEmptySlots) {
 		return new IEnumerable<Element>() {
 			@Override public Enumerator<Element> iterator() {
-				return new InventorySpaceEnumerator(InventoryUtils.asIterable(inventory), item);
+				return new InventorySpaceEnumerator(InventoryUtils.asIterable(inventory), item, maxEmptySlots);
 			} };
 	}
 	
@@ -35,12 +36,14 @@ public final class InventoryUtils {
 	public static ItemStack insertStack(IInventory inventory, ItemStack stack, boolean simulate) {
 		ItemIdentifier identifier = new ItemIdentifier(stack);
 		int count = stack.stackSize;
-		for (Element e : lookupSpaceFor(inventory, identifier)) {
+		int maxStackSize = Math.min(stack.getMaxStackSize(), inventory.getInventoryStackLimit());
+		int maxEmptySlots = (count + maxStackSize - 1) / maxStackSize;
+		for (Element e : lookupSpaceFor(inventory, identifier, maxEmptySlots)) {
 			ItemStack current = e.get();
-			int amount = Math.min(inventory.getInventoryStackLimit() -
-			                      ((current != null) ? current.stackSize : 0), count);
+			int stackSize = ((current != null) ? current.stackSize : 0);
+			int amount = Math.min(maxStackSize - stackSize, count);
 			if (amount <= 0) continue;
-			ItemStack test = identifier.createStack(current.stackSize + amount);
+			ItemStack test = identifier.createStack(stackSize + amount);
 			if (!e.isValid(test)) continue;
 			if (!simulate) e.set(test);
 			if ((count -= amount) <= 0) return null;

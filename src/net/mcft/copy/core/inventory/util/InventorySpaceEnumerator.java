@@ -12,14 +12,16 @@ import net.minecraft.item.ItemStack;
 public class InventorySpaceEnumerator extends Enumerator<Element> {
 	
 	private final ItemIdentifier item;
+	private final int maxEmptySlots;
 	private final List<Element> emptySlots = new LinkedList<Element>();
 	
 	private Enumerator<Element> enumerator;
 	private boolean enumeratingEmptySlots = false;
 	
-	public InventorySpaceEnumerator(IInventoryEnumerable inventory, ItemIdentifier item) {
+	public InventorySpaceEnumerator(IInventoryEnumerable inventory, ItemIdentifier item, int maxEmptySlots) {
 		this.item = item;
-		enumerator = Enumerator.of(inventory);
+		this.maxEmptySlots = maxEmptySlots;
+		enumerator = inventory.iterator();
 	}
 	
 	@Override
@@ -27,10 +29,12 @@ public class InventorySpaceEnumerator extends Enumerator<Element> {
 		if (!enumeratingEmptySlots) {
 			while (enumerator.moveNext()) {
 				ItemStack stack = current().get();
-				if (stack == null)
-					emptySlots.add(current());
-				else if (item.matches(stack))
-					return true;
+				if (current().isValid(item.createStack((stack != null) ? (stack.stackSize + 1) : 1))) {
+					if ((stack == null) && (emptySlots.size() < maxEmptySlots))
+						emptySlots.add(current());
+					else if (item.matches(stack))
+						return true;
+				}
 			}
 			enumeratingEmptySlots = true;
 			enumerator = Enumerator.of(emptySlots);
