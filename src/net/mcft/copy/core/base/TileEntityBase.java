@@ -1,5 +1,7 @@
 package net.mcft.copy.core.base;
 
+import java.util.List;
+
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -64,6 +66,9 @@ public abstract class TileEntityBase extends TileEntity {
 	}
 	/** Called after the block is destroyed, drops contents etc. */
 	public void onBlockDestroyed(boolean brokenInCreative) {  }
+	
+	/** Called when the block drops as an item, allows modification of items dropped. */
+	public void getBlockDrops(List<ItemStack> drops, int fortune) {  }
 	
 	/** Called before the tile entity is being rendered as an item,
 	 *  allows setting values in the tile entity, which is then rendered. */

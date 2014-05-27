@@ -1,5 +1,7 @@
 package net.mcft.copy.core.base;
 
+import java.util.ArrayList;
+
 import net.mcft.copy.core.misc.BlockLocation;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
@@ -11,6 +13,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public abstract class BlockTileEntityBase extends BlockBase implements ITileEntityProvider {
+	
+	private TileEntityBase tileEntityBeforeRemoved;
 	
 	private ForgeDirection side;
 	private float hitX, hitY, hitZ;
@@ -56,7 +60,20 @@ public abstract class BlockTileEntityBase extends BlockBase implements ITileEnti
 	
 	@Override
 	public void onBlockPreDestroy(World world, int x, int y, int z, int meta) {
-		getTileEntity(world, x, y, z).onBlockDestroyed();
+		tileEntityBeforeRemoved = getTileEntity(world, x, y, z);
+		tileEntityBeforeRemoved.onBlockDestroyed();
+	}
+	
+	@Override
+	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
+		TileEntityBase tileEntity = BlockLocation.get(world, x, y, z).getTileEntity(getTileEntityClass());
+		// Tile entity might already be removed. (Damn that inconsistency!)
+		// In this case let's use the value from onBlockPreDestroy:
+		if (tileEntity == null) tileEntity = tileEntityBeforeRemoved;
+		
+		ArrayList<ItemStack> drops = super.getDrops(world, x, y, z, metadata, fortune);
+		tileEntity.getBlockDrops(drops, fortune);
+		return drops;
 	}
 	
 	@Override
