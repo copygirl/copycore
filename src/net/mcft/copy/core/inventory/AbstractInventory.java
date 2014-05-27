@@ -46,7 +46,7 @@ public abstract class AbstractInventory implements IInventoryEnumerable {
 	@Override
 	public Enumerator<Element> iterator() {
 		return new Enumerator<Element>() {
-			private int index = 0;
+			private int index = -1;
 			@Override
 			public boolean moveNext() {
 				if (index < getSizeInventory() - 1) {
@@ -56,6 +56,8 @@ public abstract class AbstractInventory implements IInventoryEnumerable {
 			}
 			@Override
 			public Element current() {
+				if (index < 0)
+					throw new IllegalStateException("moveNext() needs to be called once before current().");
 				return new Element(AbstractInventory.this, index);
 			}
 		};
