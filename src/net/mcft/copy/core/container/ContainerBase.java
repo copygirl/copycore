@@ -86,7 +86,6 @@ public class ContainerBase extends Container {
 		T container;
 		try {
 			Constructor<T> constructor = containerClass.getConstructor(EntityPlayer.class, NBTTagCompound.class);
-			if (!constructor.isAccessible()) constructor.setAccessible(true);
 			container = constructor.newInstance(player, data);
 		} catch (Exception e) { throw new Error(e); }
 		container.initialize();
@@ -101,8 +100,8 @@ public class ContainerBase extends Container {
 		player.closeContainer();
 		player.openContainer = this;
 		windowId = player.currentWindowId;
-		addCraftingToCrafters(player);
 		copycore.getChannelHandler().sendToPlayer(player, new PacketOpenGui(this));
+		addCraftingToCrafters(player);
 	}
 	
 	/** Returns the GUI class to display on the client. */

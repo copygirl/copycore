@@ -40,8 +40,8 @@ public class ChannelHandler extends FMLIndexedMessageToMessageCodec<AbstractPack
 		try {
 			packet.decode(context, new PacketBuffer(source));
 		} catch (Exception t) {
-			copycore.getLogger().error("Error decoding packet '%s': %s",
-			                           packet.getClass().getSimpleName(), t);
+			copycore.getLogger().error("Error decoding packet '%s':", packet.getClass().getSimpleName());
+			t.printStackTrace();
 			return;
 		}
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {

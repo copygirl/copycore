@@ -14,7 +14,7 @@ public class InventoryStacks extends AbstractInventory {
 		this.stacks = stacks;
 	}
 	public InventoryStacks(ItemStack[] stacks) {
-		this.stacks = Arrays.asList(stacks);
+		this(Arrays.asList(stacks));
 	}
 	
 	@Override

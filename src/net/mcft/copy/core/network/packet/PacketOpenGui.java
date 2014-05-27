@@ -18,22 +18,29 @@ import net.minecraft.network.PacketBuffer;
 /** Opens a container along with its GUI on the client. */
 public class PacketOpenGui extends AbstractPacket {
 	
+	public String containerId;
+	public int windowId;
 	public NBTTagCompound data;
 	
 	public PacketOpenGui() {  }
 	public PacketOpenGui(ContainerBase container) {
+		containerId = ContainerRegistry.getIdFromContainer(container);
+		windowId = container.windowId;
 		data = new NBTTagCompound();
-		data.setString("ID", ContainerRegistry.getIdFromContainer(container));
 		container.writeToCompound(data);
 	}
 	
 	@Override
 	public void encode(ChannelHandlerContext context, PacketBuffer buffer) throws IOException {
+		buffer.writeStringToBuffer(containerId);
+		buffer.writeInt(windowId);
 		buffer.writeNBTTagCompoundToBuffer(data);
 	}
 	
 	@Override
 	public void decode(ChannelHandlerContext context, PacketBuffer buffer) throws IOException {
+		containerId = buffer.readStringFromBuffer(128);
+		windowId = buffer.readInt();
 		data = buffer.readNBTTagCompoundFromBuffer();
 	}
 	
@@ -42,9 +49,10 @@ public class PacketOpenGui extends AbstractPacket {
 		ContainerBase container;
 		GuiContainerBase gui;
 		Class<? extends ContainerBase> containerClass =
-				ContainerRegistry.getContainerFromId(data.getString("ID"));
+				ContainerRegistry.getContainerFromId(containerId);
 		try {
 			container = ContainerBase.create(containerClass, player, data);
+			container.windowId = windowId;
 			Class<? extends GuiContainerBase> guiClass = container.getGuiClass();
 			Constructor<? extends GuiContainerBase> guiConstructor =
 					guiClass.getConstructor(ContainerBase.class);
