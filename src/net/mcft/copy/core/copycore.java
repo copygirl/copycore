@@ -1,6 +1,7 @@
 package net.mcft.copy.core;
 
 import net.mcft.copy.core.network.ChannelHandler;
+import net.mcft.copy.core.network.packet.PacketOpenGui;
 import net.mcft.copy.core.network.packet.PacketSyncSettings;
 import net.mcft.copy.core.proxy.CommonProxy;
 import net.mcft.copy.core.tweak.TweakAutoReplace;
@@ -47,6 +48,7 @@ public class copycore
 		logger = event.getModLog();
 		channelHandler = new ChannelHandler(MOD_ID);
 		channelHandler.addDiscriminator(0, PacketSyncSettings.class);
+		channelHandler.addDiscriminator(1, PacketOpenGui.class);
 		
 	}
 	
