@@ -58,7 +58,7 @@ public class PacketOpenGui extends AbstractPacket {
 					guiClass.getConstructor(ContainerBase.class);
 			gui = guiConstructor.newInstance(container);
 		} catch (Exception e) {
-			copycore.getLogger().error("Failed creating GUI for " + containerClass.getSimpleName() + ":");
+			copycore.getLogger().error("Failed creating GUI for '{}':", containerClass.getSimpleName());
 			e.printStackTrace();
 			return;
 		}

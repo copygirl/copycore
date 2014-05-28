@@ -20,7 +20,7 @@ public class ModelReloader implements IResourceManagerReloadListener {
 	
 	@Override
 	public void onResourceManagerReload(IResourceManager manager) {
-		copycore.getLogger().info("Reloading " + modelsToReload.size() + " models.");
+		copycore.getLogger().info("Reloading {} models.", modelsToReload.size());
 		for (IReloadableModel model : modelsToReload)
 			model.reload();
 	}
