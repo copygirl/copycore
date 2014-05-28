@@ -14,6 +14,7 @@ import net.minecraft.network.INetHandler;
 import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.FMLEmbeddedChannel;
 import cpw.mods.fml.common.network.FMLIndexedMessageToMessageCodec;
@@ -77,12 +78,10 @@ public class ChannelHandler extends FMLIndexedMessageToMessageCodec<AbstractPack
 		channel.writeAndFlush(packet);
 	}
 	
-	/** Sends a packet to everyone near this entity. */
-	public void sendToEveryoneNear(Entity entity, AbstractPacket packet) {
-		// TODO: In the best case, there should be a sendToEveryoneTracking.
-		// At the moment this is only possible using vanilla packets or through
-		// private fields and lots of custom code.
-		sendToEveryoneNear(entity.worldObj, entity.posX, entity.posY, entity.posZ, 128, packet);
+	/** Sends a packet to everyone tracking this entity. */
+	public void sendToEveryoneTracking(Entity entity, AbstractPacket packet) {
+		((WorldServer)entity.worldObj).getEntityTracker().func_151247_a(
+				entity, channels.get(Side.SERVER).generatePacketFrom(packet));
 	}
 	
 	/** Sends a packet to everyone near a certain position in the world except for one player. */
