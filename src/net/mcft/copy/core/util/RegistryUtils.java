@@ -10,7 +10,7 @@ public final class RegistryUtils {
 	
 	private RegistryUtils() {  }
 	
-	/** Returns the mod ID of the currently active mod.
+	/** Returns the mod ID of the currently active mod. <br>
 	 *  <b>Warning:</b> Only use during FML events preinit, init, postinit and similar. */
 	public static String getActiveModId() {
 		return Loader.instance().activeModContainer().getModId();
