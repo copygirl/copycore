@@ -75,7 +75,10 @@ public abstract class TileEntityBase extends TileEntity {
 	@SideOnly(Side.CLIENT)
 	public void onRenderAsItem(ItemStack stack) {  }
 	
-	// Loading, saving and syncing
+	// Saving, loading and syncing
+	
+	/** Returns if this tile entity has a "description packet". */
+	public boolean hasDescriptionPacket() { return false; }
 	
 	/** Handles writing data to both the save and description packet. */
 	public void write(NBTTagCompound compound) {  }
@@ -91,9 +94,6 @@ public abstract class TileEntityBase extends TileEntity {
 	public void writeToDescriptionPacket(NBTTagCompound compound) {  }
 	/** Handles read data from the description packet, sent from the server. */
 	public void readFromDescriptionPacket(NBTTagCompound compound) {  }
-	
-	/** Returns if this tile entity has a "description packet". */
-	public boolean hasDescriptionPacket() { return false; }
 	
 	
 	@Override
