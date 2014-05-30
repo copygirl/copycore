@@ -4,6 +4,7 @@ import net.mcft.copy.core.client.GuiTextureResource;
 import net.mcft.copy.core.container.ContainerBase;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.util.StatCollector;
 
 import org.lwjgl.opengl.GL11;
 
@@ -52,6 +53,7 @@ public class GuiContainerBase extends GuiContainer {
 	@Override
 	protected void drawGuiContainerForegroundLayer(int par1, int par2) {
 		fontRendererObj.drawString(title, 8, 6, 0x404040);
+		fontRendererObj.drawString(StatCollector.translateToLocal("container.inventory"), 8, ySize - 93, 0x404040);
 	}
 	
 	@Override
