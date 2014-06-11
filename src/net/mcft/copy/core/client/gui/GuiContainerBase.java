@@ -70,7 +70,7 @@ public class GuiContainerBase extends GuiContainer {
 	}
 	
 	public void drawQuad(int x, int y, int u, int v, int w, int h)
-    {
+	{
 		float scaleX = 1.0F / currentTexture.defaultWidth;
 		float scaleY = 1.0F / currentTexture.defaultHeight;
 		Tessellator tess = Tessellator.instance;
