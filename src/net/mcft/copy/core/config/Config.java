@@ -11,6 +11,7 @@ import net.mcft.copy.core.config.setting.BooleanSetting;
 import net.mcft.copy.core.config.setting.DoubleSetting;
 import net.mcft.copy.core.config.setting.IntegerSetting;
 import net.mcft.copy.core.config.setting.Setting;
+import net.mcft.copy.core.util.RegistryUtils;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.config.Configuration;
 
@@ -31,10 +32,13 @@ public class Config {
 	private final Map<String, Setting> settings = new HashMap<String, Setting>();
 	private final List<Setting> syncedSettings = new ArrayList<Setting>();
 	
-	public Config(String id, File file) {
-		this.id = id;
+	public Config(File file, String id) {
 		forgeConfig = new Configuration(file);
 		allConfigs.put(id, this);
+		this.id = id;
+	}
+	public Config(File file) {
+		this(file, RegistryUtils.getActiveModId());
 	}
 	
 	/** Adds a setting to the config. */
