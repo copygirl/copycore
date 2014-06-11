@@ -62,7 +62,7 @@ public abstract class Setting<T> {
 	/** Sets the value of the setting. */
 	public void setValue(T value) {
 		this.value = value;
-		syncedValue = value;
+		setSyncedValue(value);
 	}
 	/** Sets the synced value of the setting. getValue()
 	 *  will return this value, but it won't be saved. */
