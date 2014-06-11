@@ -16,7 +16,6 @@ import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.FMLEmbeddedChannel;
 import cpw.mods.fml.common.network.FMLIndexedMessageToMessageCodec;
 import cpw.mods.fml.common.network.FMLOutboundHandler;
@@ -46,8 +45,8 @@ public class ChannelHandler extends FMLIndexedMessageToMessageCodec<AbstractPack
 			ex.printStackTrace();
 			return;
 		}
-		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
-			INetHandler netHandler = context.channel().attr(NetworkRegistry.NET_HANDLER).get();
+		INetHandler netHandler = context.channel().attr(NetworkRegistry.NET_HANDLER).get();
+		if (netHandler instanceof NetHandlerPlayServer) {
 			EntityPlayer player = ((NetHandlerPlayServer)netHandler).playerEntity;
 			packet.handleServerSide(player);
 		} else packet.handleClientSide(ClientUtils.getLocalPlayer());
