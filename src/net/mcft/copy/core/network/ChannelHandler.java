@@ -1,6 +1,7 @@
 package net.mcft.copy.core.network;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 
 import java.util.EnumMap;
@@ -40,9 +41,9 @@ public class ChannelHandler extends FMLIndexedMessageToMessageCodec<AbstractPack
 	public void decodeInto(ChannelHandlerContext context, ByteBuf source, AbstractPacket packet) {
 		try {
 			packet.decode(context, new PacketBuffer(source));
-		} catch (Exception t) {
+		} catch (Exception ex) {
 			copycore.getLogger().error("Error decoding packet '{}':", packet.getClass().getSimpleName());
-			t.printStackTrace();
+			ex.printStackTrace();
 			return;
 		}
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
@@ -58,7 +59,7 @@ public class ChannelHandler extends FMLIndexedMessageToMessageCodec<AbstractPack
 	public void sendToServer(AbstractPacket packet) {
 		FMLEmbeddedChannel channel = channels.get(Side.CLIENT);
 		channel.attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.TOSERVER);
-		channel.writeAndFlush(channel);
+		channel.writeAndFlush(channel).addListener(ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE);
 	}
 	
 	/** Sends a packet to a player. */
@@ -66,7 +67,7 @@ public class ChannelHandler extends FMLIndexedMessageToMessageCodec<AbstractPack
 		FMLEmbeddedChannel channel = channels.get(Side.SERVER);
 		channel.attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.PLAYER);
 		channel.attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(player);
-		channel.writeAndFlush(packet);
+		channel.writeAndFlush(channel).addListener(ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE);
 	}
 	
 	/** Sends a packet to everyone near a certain position in the world. */
@@ -75,26 +76,26 @@ public class ChannelHandler extends FMLIndexedMessageToMessageCodec<AbstractPack
 		FMLEmbeddedChannel channel = channels.get(Side.SERVER);
 		channel.attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.ALLAROUNDPOINT);
 		channel.attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(new NetworkRegistry.TargetPoint(world.provider.dimensionId, x, y, z, distance));
-		channel.writeAndFlush(packet);
-	}
-	
-	/** Sends a packet to everyone tracking this entity. */
-	public void sendToEveryoneTracking(Entity entity, AbstractPacket packet) {
-		((WorldServer)entity.worldObj).getEntityTracker().func_151247_a(
-				entity, channels.get(Side.SERVER).generatePacketFrom(packet));
+		channel.writeAndFlush(channel).addListener(ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE);
 	}
 	
 	/** Sends a packet to everyone near a certain position in the world except for one player. */
 	public void sendToEveryoneNear(World world, double x, double y, double z, double distance,
 	                               EntityPlayer except, AbstractPacket packet) {
 		for (EntityPlayer player : (List<EntityPlayer>)world.playerEntities) {
+			if (player == except) continue;
 			double dx = x - player.posX;
 			double dy = y - player.posY;
 			double dz = z - player.posZ;
             if ((dx * dx + dy * dy + dz * dz) < (distance * distance))
             	sendToPlayer(player, packet);
-            	
 		}
+	}
+	
+	/** Sends a packet to everyone tracking this entity. */
+	public void sendToEveryoneTracking(Entity entity, AbstractPacket packet) {
+		((WorldServer)entity.worldObj).getEntityTracker().func_151247_a(
+				entity, channels.get(Side.SERVER).generatePacketFrom(packet));
 	}
 	
 }
