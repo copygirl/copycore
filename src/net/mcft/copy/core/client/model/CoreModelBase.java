@@ -19,7 +19,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class CoreModelBase extends ModelBase implements IReloadableModel {
 	
 	public final ResourceLocation resource;
-	
 	public IModelCustom model;
 	
 	public CoreModelBase(ResourceLocation resource) {
@@ -34,8 +33,7 @@ public class CoreModelBase extends ModelBase implements IReloadableModel {
 	
 	
 	public void render(Entity entity, double x, double y, double z, float partialTick) {
-		// TODO: Implement entity renderer?
-		// renderModel(entity, partialTick);
+		renderInternal(entity, x, y, z, partialTick);
 	}
 	
 	public void render(TileEntity tileEntity, double x, double y, double z, float partialTick) {
@@ -48,13 +46,13 @@ public class CoreModelBase extends ModelBase implements IReloadableModel {
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 		GL11.glTranslated(x, y, z);
 		
+		if (model == null) reload();
 		renderModel(entity, partialTick);
 		
 		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 		GL11.glPopMatrix();
 		
 	}
-	
 	
 	protected void renderModel(Object entity, float partialTick) {
 		model.renderAll();
