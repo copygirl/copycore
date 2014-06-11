@@ -100,7 +100,7 @@ public class ContainerBase extends Container {
 		player.closeContainer();
 		player.openContainer = this;
 		windowId = player.currentWindowId;
-		copycore.getChannelHandler().sendToPlayer(player, new PacketOpenGui(this));
+		copycore.channelHandler.sendToPlayer(player, new PacketOpenGui(this));
 		addCraftingToCrafters(player);
 	}
 	

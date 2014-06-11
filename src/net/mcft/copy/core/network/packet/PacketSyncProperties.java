@@ -49,12 +49,12 @@ public class PacketSyncProperties extends AbstractPacket {
 	public void handleClientSide(EntityPlayer player) {
 		Entity entity = player.worldObj.getEntityByID(entityId);
 		if (entity == null) {
-			copycore.getLogger().warn("Couldn't find entity to sync to for properties '{}'.", identifier);
+			copycore.log.warn("Couldn't find entity to sync to for properties '{}'.", identifier);
 			return;
 		}
 		IExtendedEntityProperties properties = entity.getExtendedProperties(identifier);
 		if (!(properties instanceof SyncedEntityProperties)) {
-			copycore.getLogger().warn("No valid syncable properties found for '{}'.", identifier);
+			copycore.log.warn("No valid syncable properties found for '{}'.", identifier);
 			return;
 		}
 		SyncedEntityProperties syncProperties = (SyncedEntityProperties)properties;

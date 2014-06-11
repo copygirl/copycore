@@ -20,7 +20,7 @@ public class ModelReloader implements IResourceManagerReloadListener {
 	
 	@Override
 	public void onResourceManagerReload(IResourceManager manager) {
-		copycore.getLogger().info("Reloading {} models.", modelsToReload.size());
+		copycore.log.info("Reloading {} models.", modelsToReload.size());
 		for (IReloadableModel model : modelsToReload)
 			model.reload();
 	}
@@ -29,7 +29,7 @@ public class ModelReloader implements IResourceManagerReloadListener {
 		IResourceManager manager = Minecraft.getMinecraft().getResourceManager();
 		if (manager instanceof IReloadableResourceManager)
 			((IReloadableResourceManager)manager).registerReloadListener(instance);
-		else copycore.getLogger().warn("Resource manager is not reloadable?");
+		else copycore.log.warn("Resource manager is not reloadable?");
 	}
 	
 	/** Registers a model to be reloaded when resource manager has

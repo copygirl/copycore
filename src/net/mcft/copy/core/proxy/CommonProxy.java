@@ -20,7 +20,7 @@ public class CommonProxy {
 	public void onPlayerLoggedIn(PlayerLoggedInEvent event) {
 		// Synchronize settings with newly joined players.
 		AbstractPacket packet = new PacketSyncSettings(Config.getAllConfigs());
-		copycore.getChannelHandler().sendToPlayer(event.player, packet);
+		copycore.channelHandler.sendToPlayer(event.player, packet);
 	}
 	
 }

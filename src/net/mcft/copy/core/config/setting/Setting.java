@@ -78,8 +78,8 @@ public abstract class Setting<T> {
 		String warning = validateInternal(getInternalValue());
 		if (warning != null) {
 			setValue(defaultValue);
-			copycore.getLogger().warn(String.format("Config setting {} is invalid: {}. Using default value: {}.",
-			                                        fullName, warning, defaultValue));
+			copycore.log.warn(String.format("Config setting {} is invalid: {}. Using default value: {}.",
+			                                fullName, warning, defaultValue));
 		}
 	}
 	
