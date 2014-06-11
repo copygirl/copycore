@@ -11,12 +11,12 @@ public interface ITextureProvider {
 	@SideOnly(Side.CLIENT)
 	public int getRenderPasses();
 	
-	/** Returns the texture to be used for this object's renderer in this render pass. */
-	@SideOnly(Side.CLIENT)
-	public ResourceLocation getTexture(int pass);
-	
 	/** Returns the color to be used for this object's renderer in this render pass. */
 	@SideOnly(Side.CLIENT)
 	public Color getColor(int pass);
+	
+	/** Returns the texture to be used for this object's renderer in this render pass. */
+	@SideOnly(Side.CLIENT)
+	public ResourceLocation getTexture(int pass);
 	
 }

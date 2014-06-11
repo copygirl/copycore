@@ -75,7 +75,7 @@ public class Color {
 	}
 	
 	@Override
-	public int hashCode() { return toHexRGBA(); }
+	public int hashCode() { return toHexARGB(); }
 	
 	@Override
 	public String toString() {
