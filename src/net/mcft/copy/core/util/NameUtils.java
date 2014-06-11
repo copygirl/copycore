@@ -6,12 +6,12 @@ public final class NameUtils {
 	
 	private NameUtils() {  }
 
-	/** Gets the name of a game object from its class name. <br>
+	/** Gets the name of an object's class with the first part removed. <br>
 	 *  For example: <code>BlockCraftingStation</code> => <code>craftingStation</code> */
 	public static String getName(Object object) {
 		return getName(object.getClass());
 	}
-	/** Gets the name from this class' name. <br>
+	/** Gets the name of a class with the first part of it removed. <br>
 	 *  For example: <code>BlockCraftingStation</code> => <code>craftingStation</code> */
 	public static String getName(Class clazz) {
 		String fullName = clazz.getSimpleName();
