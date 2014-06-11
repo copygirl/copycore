@@ -7,22 +7,16 @@ public abstract class Tweak {
 	/** Returns if this tweak is enabled. */
 	public boolean isEnabled() { return enabled; }
 	
-	/** Enables this tweak. */
-	public void enable() {
-		if (enabled) return;
-		enableInternal();
-		enabled = false;
+	/** Enables or disables this tweak. */
+	public void setEnabled(boolean enabled) {
+		if (this.enabled == enabled) return;
+		if (enabled) enable();
+		else disable();
+		this.enabled = enabled;
 	}
 	
-	/** Disables this tweak. */
-	public void disable() {
-		if (!enabled) return;
-		disableInternal();
-		enabled = false;
-	}
+	protected abstract void enable();
 	
-	protected abstract void enableInternal();
-	
-	protected abstract void disableInternal();
+	protected abstract void disable();
 	
 }
