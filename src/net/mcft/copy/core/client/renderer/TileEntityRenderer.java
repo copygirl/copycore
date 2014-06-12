@@ -66,7 +66,7 @@ public class TileEntityRenderer extends TileEntitySpecialRenderer {
 	
 	
 	@Override
-	public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float partialTick) {
+	public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float partialTicks) {
 		CoreModelBase model = getModel(tileEntity);
 		if (model == null) return;
 		
@@ -87,14 +87,14 @@ public class TileEntityRenderer extends TileEntitySpecialRenderer {
 		for (int pass = 0; pass < getRenderPasses(tileEntity); pass++) {
 			bindTexture(getTexture(tileEntity, pass));
 			getColor(tileEntity, pass).setActiveGLColor();
-			render(tileEntity, model, partialTick);
+			render(tileEntity, model, partialTicks);
 		}
 		
 		GL11.glPopMatrix();
 	}
 	
-	public void render(TileEntity tileEntity, CoreModelBase model, float partialTick) {
-		model.render(tileEntity, 0, 0, 0, partialTick);
+	public void render(TileEntity tileEntity, CoreModelBase model, float partialTicks) {
+		model.render(tileEntity, 0, 0, 0, partialTicks);
 	}
 	
 }
