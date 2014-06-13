@@ -33,6 +33,9 @@ public final class TweakAutoReplace extends Tweak {
 		
 		if (event.entity.worldObj.isRemote) return;
 		
+		// Make sure it's not a custom (mod) player
+		if (!(event.entityPlayer instanceof EntityPlayerMP)) return;
+		
 		EntityPlayerMP player = (EntityPlayerMP)event.entityPlayer;
 		InventoryPlayer inv = player.inventory;
 		
