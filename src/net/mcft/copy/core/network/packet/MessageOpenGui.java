@@ -1,7 +1,5 @@
 package net.mcft.copy.core.network.packet;
 
-import io.netty.channel.ChannelHandlerContext;
-
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 
@@ -9,21 +7,21 @@ import net.mcft.copy.core.copycore;
 import net.mcft.copy.core.client.gui.GuiContainerBase;
 import net.mcft.copy.core.container.ContainerBase;
 import net.mcft.copy.core.container.ContainerRegistry;
-import net.mcft.copy.core.network.AbstractPacket;
+import net.mcft.copy.core.network.AbstractMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
 
 /** Opens a container along with its GUI on the client. */
-public class PacketOpenGui extends AbstractPacket {
+public class MessageOpenGui extends AbstractMessage {
 	
 	public String containerId;
 	public int windowId;
 	public NBTTagCompound data;
 	
-	public PacketOpenGui() {  }
-	public PacketOpenGui(ContainerBase container) {
+	public MessageOpenGui() {  }
+	public MessageOpenGui(ContainerBase container) {
 		containerId = ContainerRegistry.getIdFromContainer(container);
 		windowId = container.windowId;
 		data = new NBTTagCompound();
@@ -31,21 +29,21 @@ public class PacketOpenGui extends AbstractPacket {
 	}
 	
 	@Override
-	public void encode(ChannelHandlerContext context, PacketBuffer buffer) throws IOException {
+	public void write(PacketBuffer buffer) throws IOException {
 		buffer.writeStringToBuffer(containerId);
 		buffer.writeInt(windowId);
 		buffer.writeNBTTagCompoundToBuffer(data);
 	}
 	
 	@Override
-	public void decode(ChannelHandlerContext context, PacketBuffer buffer) throws IOException {
+	public void read(PacketBuffer buffer) throws IOException {
 		containerId = buffer.readStringFromBuffer(128);
 		windowId = buffer.readInt();
 		data = buffer.readNBTTagCompoundFromBuffer();
 	}
 	
 	@Override
-	public void handleClientSide(EntityPlayer player) {
+	public void handle(EntityPlayer player) {
 		ContainerBase container;
 		GuiContainerBase gui;
 		Class<? extends ContainerBase> containerClass =

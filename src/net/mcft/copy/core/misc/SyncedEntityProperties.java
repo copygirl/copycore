@@ -1,7 +1,7 @@
 package net.mcft.copy.core.misc;
 
 import net.mcft.copy.core.copycore;
-import net.mcft.copy.core.network.packet.PacketSyncProperties;
+import net.mcft.copy.core.network.packet.MessageSyncProperties;
 import net.mcft.copy.core.util.EntityUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -26,14 +26,14 @@ public abstract class SyncedEntityProperties implements IExtendedEntityPropertie
 	/** Synchronizes these properties to all players tracking the entity. */ 
 	public void sync() {
 		if (!requiresSyncing()) return;
-		copycore.channelHandler.sendToEveryoneTracking(
-				entity, new PacketSyncProperties(this));
+		copycore.channel.sendToAllTracking(
+				new MessageSyncProperties(this), entity);
 	}
 	/** Synchronizes these properties to a specific player. */ 
 	public void sync(EntityPlayer player) {
 		if (!requiresSyncing()) return;
-		copycore.channelHandler.sendToPlayer(
-				player, new PacketSyncProperties(this));
+		copycore.channel.sendTo(
+				new MessageSyncProperties(this), player);
 	}
 	
 	// Saving, loading and syncing

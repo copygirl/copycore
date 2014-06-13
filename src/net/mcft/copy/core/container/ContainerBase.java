@@ -12,7 +12,7 @@ import net.mcft.copy.core.inventory.slot.InventorySlots;
 import net.mcft.copy.core.inventory.slot.SlotBase;
 import net.mcft.copy.core.inventory.slot.SlotGroup;
 import net.mcft.copy.core.inventory.util.InventoryReverse;
-import net.mcft.copy.core.network.packet.PacketOpenGui;
+import net.mcft.copy.core.network.packet.MessageOpenGui;
 import net.mcft.copy.core.util.InventoryUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -100,7 +100,7 @@ public class ContainerBase extends Container {
 		player.closeContainer();
 		player.openContainer = this;
 		windowId = player.currentWindowId;
-		copycore.channelHandler.sendToPlayer(player, new PacketOpenGui(this));
+		copycore.channel.sendTo(new MessageOpenGui(this), player);
 		addCraftingToCrafters(player);
 	}
 	
