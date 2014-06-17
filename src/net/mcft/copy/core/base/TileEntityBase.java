@@ -29,6 +29,12 @@ public abstract class TileEntityBase extends TileEntity {
 	/** Sets the custom name of this tile entity, if it can be set. */
 	public void setCustomName(String title) { if (canSetCustomName()) customName = title; }
 	
+	/** Sends a block event for this tile entity. Will cause receiveClientEvent
+	 *  to be called for players tracking the tile entity with those values. */
+	public void sendEvent(int event, int value) {
+		worldObj.addBlockEvent(xCoord, yCoord, zCoord, getBlockType(), event, value);
+	}
+	
 	// Actions passed from blocks
 	
 	/** Called when a block is placed by a player. May set data of the
