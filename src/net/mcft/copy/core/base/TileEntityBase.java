@@ -2,6 +2,7 @@ package net.mcft.copy.core.base;
 
 import java.util.List;
 
+import net.mcft.copy.core.misc.BlockLocation;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -20,6 +21,7 @@ public abstract class TileEntityBase extends TileEntity {
 	private String customName = null;
 	private boolean brokenInCreative = false;
 	
+	
 	/** Returns the custom name of the tile entity, usually from being . */
 	public String getCustomName() { return customName; }
 	
@@ -29,10 +31,18 @@ public abstract class TileEntityBase extends TileEntity {
 	/** Sets the custom name of this tile entity, if it can be set. */
 	public void setCustomName(String title) { if (canSetCustomName()) customName = title; }
 	
+	
 	/** Sends a block event for this tile entity. Will cause receiveClientEvent
 	 *  to be called for players tracking the tile entity with those values. */
 	public void sendEvent(int event, int value) {
 		worldObj.addBlockEvent(xCoord, yCoord, zCoord, getBlockType(), event, value);
+	}
+	
+	/** Returns if the tile entity is valid and in range to be accessed by the player. */
+	public boolean isUsable(EntityPlayer player) {
+		return (!player.isDead && !isInvalid() &&
+		        (BlockLocation.get(this).getTileEntity() == this) &&
+		        (player.getDistanceSq(xCoord, yCoord, zCoord) <= 64));
 	}
 	
 	// Actions passed from blocks
