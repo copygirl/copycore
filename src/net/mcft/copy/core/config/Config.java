@@ -36,7 +36,7 @@ public class Config {
 	private final List<Setting> syncedSettings = new ArrayList<Setting>();
 	
 	public Config(File file, String id) {
-		forgeConfig = new Configuration(file);
+		forgeConfig = new ModifiedConfiguration(file);
 		allConfigs.put(id, this);
 		this.id = id;
 	}
@@ -103,6 +103,23 @@ public class Config {
 		for (Setting setting : syncedSettings)
 			setting.write(compound);
 		return compound;
+	}
+	
+	
+	private static class ModifiedConfiguration extends Configuration {
+		private static boolean preventLoad = false;
+		private final File file;
+		public ModifiedConfiguration(File file) {
+			// Hacky way of preventing the config file from
+			// being loaded when the configuration is constructed.
+			super((preventLoad = true) ? file : null);
+			preventLoad = false;
+			this.file = file;
+		}
+		@Override public void load() {
+			// Don't load/create the config file when it doesn't exist.
+			if (!preventLoad && file.exists()) super.load();
+		}
 	}
 	
 }
