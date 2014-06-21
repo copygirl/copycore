@@ -11,6 +11,7 @@ import net.mcft.copy.core.config.setting.BooleanSetting;
 import net.mcft.copy.core.config.setting.DoubleSetting;
 import net.mcft.copy.core.config.setting.IntegerSetting;
 import net.mcft.copy.core.config.setting.Setting;
+import net.mcft.copy.core.config.setting.StringSetting;
 import net.mcft.copy.core.util.RegistryUtils;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.config.Configuration;
@@ -59,6 +60,8 @@ public class Config {
 	public double getDouble(String name) { return ((DoubleSetting)get(name)).getValue(); }
 	/** Returns the value of a boolean setting with that name. */
 	public boolean getBoolean(String name) { return ((BooleanSetting)get(name)).getValue(); }
+	/** Returns the value of a string setting with that name. */
+	public String getString(String name) { return ((StringSetting)get(name)).getValue(); }
 	
 	/** Adds a custom comment to a category. */
 	public void addCategoryComment(String category, String comment) {
