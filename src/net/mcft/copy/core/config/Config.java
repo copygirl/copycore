@@ -29,9 +29,10 @@ public class Config {
 	
 	
 	public final String id;
-	private final Configuration forgeConfig;
 	
-	private final Map<String, Setting> settings = new HashMap<String, Setting>();
+	protected final Configuration forgeConfig;
+	protected final Map<String, Setting> settings = new HashMap<String, Setting>();
+	
 	private final List<Setting> syncedSettings = new ArrayList<Setting>();
 	
 	public Config(File file, String id) {
