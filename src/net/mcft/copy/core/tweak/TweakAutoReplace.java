@@ -31,7 +31,8 @@ public final class TweakAutoReplace extends Tweak {
 	@SubscribeEvent
 	public void onPlayerDestroyItem(PlayerDestroyItemEvent event) {
 		
-		if (event.entity.worldObj.isRemote) return;
+		if (event.entity.worldObj.isRemote ||
+		    !(event.entityPlayer instanceof EntityPlayerMP)) return;
 		
 		EntityPlayerMP player = (EntityPlayerMP)event.entityPlayer;
 		InventoryPlayer inv = player.inventory;
