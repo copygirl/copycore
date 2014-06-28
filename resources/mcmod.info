@@ -1,14 +1,21 @@
-[{
-  "modid": "copycore",
-  "name": "copycore",
-  "description": "",
-  "version": "${version}",
-  "mcversion": "${mcversion}",
-  "url": "",
-  "updateUrl": "",
-  "authors": [ "copygirl" ],
-  "credits": "",
-  "logoFile": "",
-  "screenshots": [ ],
-  "dependencies": [ ]
-}]
+{
+  "modListVersion": 2,
+  "modList": [{
+    "modid": "copycore",
+    "name": "copycore",
+    "description": "Library mod used for my other mods.",
+    "version": "${version}",
+    "mcversion": "${mcversion}",
+    "url": "https://github.com/copygirl/copycore",
+    "updateUrl": "https://github.com/copygirl/copycore/releases",
+    "authorList": [ "copygirl" ],
+    "credits": "",
+    "logoFile": "",
+    "screenshots": [ ],
+    "parent": "",
+    "requiredMods": [ "Forge" ],
+    "dependencies": [ ],
+    "dependants": [ ],
+    "useDependencyInformation": true
+  }]
+}
