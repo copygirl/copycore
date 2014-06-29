@@ -27,7 +27,7 @@ public abstract class SyncedEntityProperties implements IExtendedEntityPropertie
 	public void sync() {
 		if (!requiresSyncing()) return;
 		copycore.channel.sendToAllTracking(
-				new MessageSyncProperties(this), entity);
+				new MessageSyncProperties(this), entity, true);
 	}
 	/** Synchronizes these properties to a specific player. */ 
 	public void sync(EntityPlayer player) {

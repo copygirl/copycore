@@ -28,14 +28,17 @@ public class NetworkChannel extends SimpleNetworkWrapper {
 		registerMessage(messageClass, messageClass, id, receivingSide);
 	}
 	
+	/** Sends a message to a player. */
 	public void sendTo(IMessage message, EntityPlayer player) {
 		sendTo(message, (EntityPlayerMP)player);
 	}
 	
+	/** Sends a message to everyone around a point. */
 	public void sendToAllAround(IMessage message, World world, double x, double y, double z, double distance) {
 		sendToAllAround(message, new NetworkRegistry.TargetPoint(world.provider.dimensionId, x, y, z, distance));
 	}
 	
+	/** Sends a message to everyone around a point except a specific player. */
 	public void sendToAllAround(IMessage message, World world, double x, double y, double z,
 	                            double distance, EntityPlayer except) {
 		for (EntityPlayer player : (List<EntityPlayer>)world.playerEntities) {
@@ -48,8 +51,12 @@ public class NetworkChannel extends SimpleNetworkWrapper {
 		}
 	}
 	
-	public void sendToAllTracking(IMessage message, Entity entity) {
+	/** Sends a message to a everyone tracking an entity.
+	 *  If sendToEntity is true and the entity is a players, also sends the message to em. */
+	public void sendToAllTracking(IMessage message, Entity entity, boolean sendToEntity) {
 		((WorldServer)entity.worldObj).getEntityTracker().func_151247_a(entity, getPacketFrom(message));
+		if (sendToEntity && (entity instanceof EntityPlayer))
+			sendTo(message, (EntityPlayer)entity);
 	}
 	
 }
