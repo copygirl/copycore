@@ -12,6 +12,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /** Opens a container along with its GUI on the client. */
 public class MessageOpenGui extends AbstractMessage {
@@ -42,6 +44,7 @@ public class MessageOpenGui extends AbstractMessage {
 		data = buffer.readNBTTagCompoundFromBuffer();
 	}
 	
+	@SideOnly(Side.CLIENT)
 	@Override
 	public void handle(EntityPlayer player) {
 		ContainerBase container;
