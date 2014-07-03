@@ -1,5 +1,6 @@
 package net.mcft.copy.core.client.gui;
 
+import net.mcft.copy.core.copycore;
 import net.mcft.copy.core.client.GuiTextureResource;
 import net.mcft.copy.core.container.ContainerBase;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -14,7 +15,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class GuiContainerBase extends GuiContainer {
 	
-	public static final GuiTextureResource generic9by6 = new GuiTextureResource("generic_9x6", 256, 256);
+	public static final GuiTextureResource generic9by6 =
+			new GuiTextureResource(copycore.MOD_ID, "generic_9x6", 256, 256);
 	
 	public static GuiTextureResource currentTexture;
 	
