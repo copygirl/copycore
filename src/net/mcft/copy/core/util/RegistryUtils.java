@@ -5,6 +5,7 @@ import java.util.Arrays;
 import net.mcft.copy.core.config.Config;
 import net.mcft.copy.core.config.setting.BooleanSetting;
 import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.LoaderState;
 
 public final class RegistryUtils {
 	
@@ -13,6 +14,8 @@ public final class RegistryUtils {
 	/** Returns the mod ID of the currently active mod. <br>
 	 *  <b>Warning:</b> Only use during FML events preinit, init, postinit and similar. */
 	public static String getActiveModId() {
+		if (Loader.instance().hasReachedState(LoaderState.AVAILABLE))
+			throw new RuntimeException("getActiveModId can't be called after mods have been initialized!");
 		return Loader.instance().activeModContainer().getModId();
 	}
 	
