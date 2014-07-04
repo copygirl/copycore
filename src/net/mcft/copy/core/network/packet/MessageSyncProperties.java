@@ -1,14 +1,15 @@
 package net.mcft.copy.core.network.packet;
 
 import java.io.IOException;
+import java.util.List;
 
 import net.mcft.copy.core.copycore;
-import net.mcft.copy.core.misc.SyncedEntityProperties;
+import net.mcft.copy.core.entity.EntityPropertiesBase;
+import net.mcft.copy.core.entity.EntityProperty;
 import net.mcft.copy.core.network.AbstractMessage;
 import net.mcft.copy.core.util.EntityUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.common.IExtendedEntityProperties;
 
@@ -18,29 +19,40 @@ public class MessageSyncProperties extends AbstractMessage {
 	
 	public int entityId;
 	public String identifier;
-	public NBTTagCompound data;
+	public List<EntityProperty> propertyList;
+	public PacketBuffer propertyBuffer;
 	
 	public MessageSyncProperties() {  }
-	public MessageSyncProperties(SyncedEntityProperties properties) {
+	public MessageSyncProperties(EntityPropertiesBase properties, List<EntityProperty> propertyList) {
 		entityId = properties.getEntity().getEntityId();
 		identifier = EntityUtils.getIdentifier(properties.getClass());
-		data = new NBTTagCompound();
-		properties.write(data);
-		properties.writeToSyncPacket(data);
+		this.propertyList = propertyList;
 	}
 	
 	@Override
 	public void write(PacketBuffer buffer) throws IOException {
 		buffer.writeInt(entityId);
 		buffer.writeStringToBuffer(identifier);
-		buffer.writeNBTTagCompoundToBuffer(data);
+		
+		int index = buffer.writerIndex();
+		buffer.writeInt(0);
+		
+		buffer.writeByte(propertyList.size());
+		for (EntityProperty property : propertyList) {
+			buffer.writeByte(property.id);
+			property.write(buffer);
+		}
+		
+		// Retroactively set the length of the part of
+		// the buffer that contains the properties list.
+		buffer.setInt(index, buffer.writerIndex() - index - 4);
 	}
 	
 	@Override
 	public void read(PacketBuffer buffer) throws IOException {
 		entityId = buffer.readInt();
 		identifier = buffer.readStringFromBuffer(128);
-		data = buffer.readNBTTagCompoundFromBuffer();
+		propertyBuffer = new PacketBuffer(buffer.readBytes(buffer.readInt()));
 	}
 	
 	@Override
@@ -51,13 +63,14 @@ public class MessageSyncProperties extends AbstractMessage {
 			return;
 		}
 		IExtendedEntityProperties properties = entity.getExtendedProperties(identifier);
-		if (!(properties instanceof SyncedEntityProperties)) {
+		if (!(properties instanceof EntityPropertiesBase)) {
 			copycore.log.warn("No valid syncable properties found for '{}'.", identifier);
 			return;
 		}
-		SyncedEntityProperties syncProperties = (SyncedEntityProperties)properties;
-		syncProperties.read(data);
-		syncProperties.readFromSyncPacket(data);
+		EntityPropertiesBase syncProperties = (EntityPropertiesBase)properties;
+		int amount = propertyBuffer.readByte();
+		for (int i = 0; i < amount; i++)
+			syncProperties.getPropertyById(propertyBuffer.readByte()).read(propertyBuffer);
 	}
 	
 }
