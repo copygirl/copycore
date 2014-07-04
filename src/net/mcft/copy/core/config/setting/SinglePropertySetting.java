@@ -15,7 +15,7 @@ public abstract class SinglePropertySetting<T> extends Setting<T> {
 	
 	protected Property getProperty(Configuration config) {
 		if (property == null)
-			property = config.get(category, name, String.valueOf(defaultValue), comment, getPropertyType());
+			property = config.get(category, name, String.valueOf(defaultValue), getComment(), getPropertyType());
 		return property;
 	}
 	

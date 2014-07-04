@@ -19,9 +19,9 @@ public abstract class Setting<T> {
 	/** The category, for example "block.storage". */
 	public final String category;
 	
-	protected T value;
-	protected T syncedValue;
-	protected String comment = null;
+	private T value;
+	private T syncedValue;
+	private String comment = null;
 	private boolean synced = false;
 	
 	public Setting(Config config, String fullName, T defaultValue) {
@@ -58,6 +58,8 @@ public abstract class Setting<T> {
 	public T getValue() { return syncedValue; }
 	/** Returns the internal value of the setting. */
 	public T getInternalValue() { return value; }
+	/** Returns the setting's comment. */
+	public String getComment() { return comment; }
 
 	/** Sets the value of the setting. */
 	public void setValue(T value) {
