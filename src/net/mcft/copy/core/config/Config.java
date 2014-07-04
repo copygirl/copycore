@@ -28,6 +28,7 @@ public class Config {
 	public static Config getConfigById(String id) { return allConfigs.get(id); }
 	
 	
+	public final File file;
 	public final String id;
 	
 	protected final Configuration forgeConfig;
@@ -36,9 +37,10 @@ public class Config {
 	private final List<Setting> syncedSettings = new ArrayList<Setting>();
 	
 	public Config(File file, String id) {
+		this.file = file;
+		this.id = id;
 		forgeConfig = new ModifiedConfiguration(file);
 		allConfigs.put(id, this);
-		this.id = id;
 	}
 	public Config(File file) {
 		this(file, RegistryUtils.getActiveModId());
