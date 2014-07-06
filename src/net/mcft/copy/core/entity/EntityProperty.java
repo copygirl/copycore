@@ -16,6 +16,7 @@ public abstract class EntityProperty<T> {
 	
 	private boolean saved = false;
 	private boolean synced = false;
+	private boolean syncToAll = false;
 	
 	public EntityProperty(String name, T value) {
 		this.name = name;
@@ -41,12 +42,16 @@ public abstract class EntityProperty<T> {
 	/** Marks this property to be saved to the entity / disk. */
 	public EntityProperty<T> setSaved() { saved = true; return this; }
 	/** Marks this property to be synchronized with clients. */
-	public EntityProperty<T> setSynced() { synced = true; return this; }
+	public EntityProperty<T> setSynced(boolean syncToAll) {
+		synced = true; this.syncToAll = syncToAll; return this; }
 	
 	/** Returns whether this property is saved to the entity / disk. */
 	public boolean isSaved() { return (saved && !Objects.equals(initialValue, get())); }
 	/** Returns whether this property is synchronized with clients. */
 	public boolean isSynced() { return synced; }
+	/** Returns whether this property is synchronized to
+	 *  all players or just the player entity itself. */
+	public boolean isSyncedToAll() { return syncToAll; }
 	
 	
 	/** Writes the property to an NBT tag. */

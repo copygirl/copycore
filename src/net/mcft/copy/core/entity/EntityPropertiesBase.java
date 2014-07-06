@@ -27,12 +27,15 @@ public abstract class EntityPropertiesBase implements IExtendedEntityProperties 
 	
 	public EntityPropertiesBase() {
 		// See if these properties need to be synced.
-		if (!checkedProperties.contains(getClass()) && (getSynced(false) != null))
+		if (!checkedProperties.contains(getClass()) && isSynced())
 			syncedProperties.add(EntityUtils.getIdentifier(getClass()));
 	}
 	
 	/** Returns the entity associated with the synced properties. */
 	public Entity getEntity() { return entity; }
+	
+	/** Returns if the properties need to be synchronized with clients. */
+	public boolean isSynced() { return false; }
 	
 	/** Returns the entity property associated with this id. */
 	public EntityProperty getPropertyById(int id) { return propertyIdMap[id]; }
@@ -53,17 +56,23 @@ public abstract class EntityPropertiesBase implements IExtendedEntityProperties 
 	/** Only called for properties that need to be synchronized. */
 	public void update() {
 		if (getEntity().worldObj.isRemote) return;
-		MessageSyncProperties message = getSynced(true);
-		if (message != null)
-			copycore.channel.sendToAllTracking(message, getEntity(), true);
+		MessageSyncProperties message;
+		if ((message = getSynced(false, true)) != null)
+			copycore.channel.sendToAllTracking(message, getEntity(), false);
+		if (getEntity() instanceof EntityPlayer)
+			if ((message = getSynced(true, true)) != null)
+				copycore.channel.sendTo(message, (EntityPlayer)getEntity());
 	}
 	
-	/** Returns a message with settings to be synchronized, or null if there's none.
-	 *  If onlyChanged is true, only includes settings that have changed since the last call. */
-	private MessageSyncProperties getSynced(boolean onlyChanged) {
+	/** Returns a message with properties to be synchronized, or null if there's none.
+	 *  If owner is true, includes properties that should only be sent to the owner of the entity.
+	 *  If onlyChanged is true, only includes properties that have changed since the last call. */
+	private MessageSyncProperties getSynced(boolean owner, boolean onlyChanged) {
 		List<EntityProperty> synced = null;
 		for (EntityProperty property : properties)
-			if (property.isSynced() && (!onlyChanged || property.hasChanged()))
+			if (property.isSynced() &&
+			    (owner || property.isSyncedToAll() &&
+			    (!onlyChanged || property.hasChanged())))
 				((synced == null) ? (synced = new ArrayList<EntityProperty>()) : synced).add(property);
 		return ((synced != null) ? new MessageSyncProperties(this, synced) : null);
 	}
@@ -71,9 +80,11 @@ public abstract class EntityPropertiesBase implements IExtendedEntityProperties 
 	/** Synchronize settings when a player starts tracking an entity. */
 	public static void syncProperties(EntityPlayer player, Entity entity) {
 		EntityPropertiesBase properties;
+		MessageSyncProperties message;
 		for (String identifier : syncedProperties)
 			if ((properties = (EntityPropertiesBase)entity.getExtendedProperties(identifier)) != null)
-				copycore.channel.sendTo(properties.getSynced(false), player);
+				if ((message = properties.getSynced((player == entity), false)) != null)
+					copycore.channel.sendTo(message, player);
 	}
 	
 	// IExtendedEntityProperties saving / loading
