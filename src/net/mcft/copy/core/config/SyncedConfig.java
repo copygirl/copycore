@@ -66,8 +66,10 @@ public class SyncedConfig implements IConfig {
 	
 	/** Writes all settings to be synced to the compound. */
 	public NBTTagCompound write(NBTTagCompound compound) {
-		for (Map.Entry<Setting, ConfigValuePair> entry : settingValues.entrySet())
+		for (Map.Entry<Setting, ConfigValuePair> entry : settingValues.entrySet()) {
+			entry.getValue().value = null;
 			entry.getKey().write(compound, entry.getValue().config.get(entry.getKey()));
+		}
 		return compound;
 	}
 	
