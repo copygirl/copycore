@@ -1,8 +1,8 @@
 package net.mcft.copy.core.client;
 
+import net.minecraft.client.renderer.Tessellator;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.client.renderer.Tessellator;
 
 @SideOnly(Side.CLIENT)
 public class GuiTextureResource extends ModResource {

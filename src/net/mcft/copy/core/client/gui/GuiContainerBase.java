@@ -4,7 +4,6 @@ import net.mcft.copy.core.copycore;
 import net.mcft.copy.core.client.GuiTextureResource;
 import net.mcft.copy.core.container.ContainerBase;
 import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.StatCollector;
 
 import org.lwjgl.opengl.GL11;
