@@ -28,7 +28,7 @@ public abstract class EntityProperty<T> {
 	/** Returns the property's value. */
 	public T get() { return value; }
 	/** Sets the property's value. */
-	public void set(T value) { this.value = value; }
+	public T set(T value) { this.value = value; return value; }
 	
 	/** Returns if the value has changed since the last call to hasChanged. */
 	public boolean hasChanged() {
