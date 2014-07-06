@@ -18,8 +18,6 @@ public class GuiContainerBase extends GuiContainer {
 	public static final GuiTextureResource generic9by6 =
 			new GuiTextureResource(copycore.MOD_ID, "generic_9x6", 256, 256);
 	
-	public static GuiTextureResource currentTexture;
-	
 	public String title;
 	public Padding padding = new Padding(7, 16, 7, 7);
 	
@@ -61,27 +59,9 @@ public class GuiContainerBase extends GuiContainer {
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float var1, int var2, int var3) {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		bindTexture(generic9by6);
-		drawQuad(guiLeft, guiTop, 0, 0, xSize, ySize - 97);
-		drawQuad(guiLeft, guiTop + ySize - 97, 0, 124, xSize, 97);
-	}
-	
-	public void bindTexture(GuiTextureResource texture) {
-		mc.getTextureManager().bindTexture(texture);
-		currentTexture = texture;
-	}
-	
-	public void drawQuad(int x, int y, int u, int v, int w, int h)
-	{
-		float scaleX = 1.0F / currentTexture.defaultWidth;
-		float scaleY = 1.0F / currentTexture.defaultHeight;
-		Tessellator tess = Tessellator.instance;
-		tess.startDrawingQuads();
-		tess.addVertexWithUV(x,     y + h, zLevel,  u      * scaleX, (v + h) * scaleY);
-		tess.addVertexWithUV(x + w, y + h, zLevel, (u + w) * scaleX, (v + h) * scaleY);
-		tess.addVertexWithUV(x + w, y,     zLevel, (u + w) * scaleX,  v      * scaleY);
-		tess.addVertexWithUV(x,     y,     zLevel,  u      * scaleX,  v      * scaleY);
-		tess.draw();
+		mc.getTextureManager().bindTexture(generic9by6);
+		generic9by6.drawQuad(guiLeft, guiTop, 0, 0, xSize, ySize - 97, zLevel);
+		generic9by6.drawQuad(guiLeft, guiTop + ySize - 97, 0, 124, xSize, 97, zLevel);
 	}
 	
 }
