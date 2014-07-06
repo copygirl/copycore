@@ -2,7 +2,6 @@ package net.mcft.copy.core.config.setting;
 
 import java.util.Arrays;
 
-import net.mcft.copy.core.config.Config;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property.Type;
@@ -15,21 +14,16 @@ public class IntegerSetting extends SinglePropertySetting<Integer> {
 	protected int maxValue = Integer.MAX_VALUE;
 	protected int[] validValues = null;
 	
-	public IntegerSetting(Config config, String fullName, Integer defaultValue) {
-		super(config, fullName, defaultValue);
+	public IntegerSetting(String fullName, Integer defaultValue) {
+		super(fullName, defaultValue);
 	}
-	public IntegerSetting(Config config, String fullName) {
-		this(config, fullName, 0);
+	public IntegerSetting(String fullName) {
+		this(fullName, 0);
 	}
 	
 	@Override
 	public IntegerSetting setComment(String comment) {
 		super.setComment(comment);
-		return this;
-	}
-	@Override
-	public IntegerSetting setSynced() {
-		super.setSynced();
 		return this;
 	}
 	
@@ -46,7 +40,7 @@ public class IntegerSetting extends SinglePropertySetting<Integer> {
 	}
 	
 	@Override
-	public String validateInternal(Integer value) {
+	public String validate(Integer value) {
 		if ((value < minValue) || (value > maxValue))
 			return String.format("Value %s is not in valid range, %s to %s",
 			                     value, minValue, maxValue);
@@ -60,13 +54,13 @@ public class IntegerSetting extends SinglePropertySetting<Integer> {
 	protected Type getPropertyType() { return Type.INTEGER; }
 	
 	@Override
-	protected Integer loadInternal(Configuration config) { return getProperty(config).getInt(); }
+	public Integer load(Configuration config) { return getProperty(config).getInt(); }
 	@Override
-	protected void saveInternal(Configuration config, Integer value) { getProperty(config).set(value); }
+	public void save(Configuration config, Integer value) { getProperty(config).set(value); }
 	
 	@Override
-	protected Integer readInternal(NBTTagCompound compound) { return compound.getInteger(fullName); }
+	public Integer read(NBTTagCompound compound) { return compound.getInteger(fullName); }
 	@Override
-	protected void writeInternal(NBTTagCompound compound, Integer value) { compound.setInteger(fullName, value); }
+	public void write(NBTTagCompound compound, Integer value) { compound.setInteger(fullName, value); }
 	
 }

@@ -3,7 +3,7 @@ package net.mcft.copy.core.network.packet;
 import java.io.IOException;
 import java.util.Set;
 
-import net.mcft.copy.core.config.Config;
+import net.mcft.copy.core.config.SyncedConfig;
 import net.mcft.copy.core.network.AbstractMessage;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -15,9 +15,9 @@ public class MessageSyncSettings extends AbstractMessage {
 	public NBTTagCompound data;
 	
 	public MessageSyncSettings() {  }
-	public MessageSyncSettings(Iterable<Config> configs) {
+	public MessageSyncSettings(Iterable<SyncedConfig> configs) {
 		data = new NBTTagCompound();
-		for (Config config : configs)
+		for (SyncedConfig config : configs)
 			data.setTag(config.id, config.write(new NBTTagCompound()));
 	}
 	
@@ -33,9 +33,9 @@ public class MessageSyncSettings extends AbstractMessage {
 	
 	@Override
 	public void handle(EntityPlayer player) {
-		Config config;
+		SyncedConfig config;
 		for (String id : (Set<String>)data.func_150296_c())
-			if ((config = Config.getConfigById(id)) != null)
+			if ((config = SyncedConfig.getConfigById(id)) != null)
 				config.read(data.getCompoundTag(id));
 	}
 	

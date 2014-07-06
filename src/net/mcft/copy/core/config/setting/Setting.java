@@ -1,16 +1,9 @@
 package net.mcft.copy.core.config.setting;
 
-import net.mcft.copy.core.copycore;
-import net.mcft.copy.core.config.Config;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.config.Configuration;
 
 public abstract class Setting<T> {
-	
-	/** The config object for this setting. */
-	public final Config config;
-	/** The default value for this setting. */
-	public final T defaultValue;
 	
 	/** The name including the category, for example "block.storage.flint". */
 	public final String fullName;
@@ -19,24 +12,19 @@ public abstract class Setting<T> {
 	/** The category, for example "block.storage". */
 	public final String category;
 	
-	private T value;
-	private T syncedValue;
-	private String comment = null;
-	private boolean synced = false;
+	/** The default value of this setting. */
+	public final T defaultValue;
+	/** The comment of this setting setting, null if none. */
+	public String comment = null;
 	
-	public Setting(Config config, String fullName, T defaultValue) {
-		this.config = config;
-		this.defaultValue = defaultValue;
-		
+	public Setting(String fullName, T defaultValue) {
 		this.fullName = fullName;
 		int dotIndex = fullName.lastIndexOf('.');
 		if (dotIndex < 1) throw new IllegalArgumentException("fullName doesn't contain a category.");
 		name = fullName.substring(dotIndex + 1);
 		category = fullName.substring(0, dotIndex);
 		
-		value = defaultValue;
-		syncedValue = value;
-		config.add(this);
+		this.defaultValue = defaultValue;
 	}
 	
 	/** Sets the comment for this setting. */
@@ -44,61 +32,32 @@ public abstract class Setting<T> {
 		this.comment = comment;
 		return this;
 	}
-	/** When set, sends the setting from the
-	 *  server to clients when they connect. */
-	public Setting<T> setSynced() {
-		if (!synced) {
-			synced = true;
-			config.syncSetting(this);
-		}
-		return this;
-	}
-	
-	/** Returns the value of the setting. */ 
-	public T getValue() { return syncedValue; }
-	/** Returns the internal value of the setting. */
-	public T getInternalValue() { return value; }
-	/** Returns the setting's comment. */
-	public String getComment() { return comment; }
-
-	/** Sets the value of the setting. */
-	public void setValue(T value) {
-		this.value = value;
-		setSyncedValue(value);
-	}
-	/** Sets the synced value of the setting. getValue()
-	 *  will return this value, but it won't be saved. */
-	public void setSyncedValue(T value) { syncedValue = value; }
 	
 	/** Validates the setting and returns a warning
 	 *  string, or null if validation was successful. */
-	protected String validateInternal(T value) { return null; }
-	
-	/** Validates the setting. If value is invalid, prints a
-	 *  warning to console and uses the default value instead. */
-	public void validate() {
-		String warning = validateInternal(getInternalValue());
-		if (warning != null) {
-			setValue(defaultValue);
-			copycore.log.warn(String.format("Config setting {} is invalid: {}. Using default value: {}.",
-			                                fullName, warning, defaultValue));
-		}
-	}
+	public String validate(T value) { return null; }
 	
 	/** Loads the setting's value from the config. */
-	public void load(Configuration config) { setValue(loadInternal(config)); }
+	public abstract T load(Configuration config);
 	/** Saves the setting's value to the config. */
-	public void save(Configuration config) { saveInternal(config, getInternalValue()); }
+	public abstract void save(Configuration config, T value);
 	
 	/** Reads the setting's synced value from the compound tag. */
-	public void read(NBTTagCompound compound) { setSyncedValue(readInternal(compound)); }
+	public abstract T read(NBTTagCompound compound);
 	/** Writes the setting's value to the compound tag. */
-	public void write(NBTTagCompound compound) { writeInternal(compound, getInternalValue()); }
+	public abstract void write(NBTTagCompound compound, T value);
 	
-	protected abstract T loadInternal(Configuration config);
-	protected abstract void saveInternal(Configuration config, T value);
+	// Equals, hashCode and toString
 	
-	protected abstract T readInternal(NBTTagCompound compound);
-	protected abstract void writeInternal(NBTTagCompound compound, T value);
+	@Override
+	public boolean equals(Object obj) {
+		return ((obj instanceof Setting) ? fullName.equals(((Setting)obj).fullName) : false);
+	}
+	
+	@Override
+	public int hashCode() { return fullName.hashCode(); }
+	
+	@Override
+	public String toString() { return "[" + fullName + "]"; }
 	
 }

@@ -1,6 +1,5 @@
 package net.mcft.copy.core.config.setting;
 
-import net.mcft.copy.core.config.Config;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property.Type;
@@ -9,21 +8,16 @@ public class StringSetting extends SinglePropertySetting<String> {
 	
 	protected String[] validValues = null;
 	
-	public StringSetting(Config config, String fullName, String defaultValue) {
-		super(config, fullName, defaultValue);
+	public StringSetting(String fullName, String defaultValue) {
+		super(fullName, defaultValue);
 	}
-	public StringSetting(Config config, String fullName) {
-		this(config, fullName, "");
+	public StringSetting(String fullName) {
+		this(fullName, "");
 	}
 	
 	@Override
 	public StringSetting setComment(String comment) {
 		super.setComment(comment);
-		return this;
-	}
-	@Override
-	public StringSetting setSynced() {
-		super.setSynced();
 		return this;
 	}
 	
@@ -37,13 +31,13 @@ public class StringSetting extends SinglePropertySetting<String> {
 	protected Type getPropertyType() { return Type.STRING; }
 	
 	@Override
-	protected String loadInternal(Configuration config) { return getProperty(config).getString(); }
+	public String load(Configuration config) { return getProperty(config).getString(); }
 	@Override
-	protected void saveInternal(Configuration config, String value) { getProperty(config).set(value); }
+	public void save(Configuration config, String value) { getProperty(config).set(value); }
 	
 	@Override
-	protected String readInternal(NBTTagCompound compound) { return compound.getString(fullName); }
+	public String read(NBTTagCompound compound) { return compound.getString(fullName); }
 	@Override
-	protected void writeInternal(NBTTagCompound compound, String value) { compound.setString(fullName, value); }
+	public void write(NBTTagCompound compound, String value) { compound.setString(fullName, value); }
 	
 }

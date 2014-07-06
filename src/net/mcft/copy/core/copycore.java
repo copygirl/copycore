@@ -5,6 +5,7 @@ import net.mcft.copy.core.network.packet.MessageOpenGui;
 import net.mcft.copy.core.network.packet.MessageSyncProperties;
 import net.mcft.copy.core.network.packet.MessageSyncSettings;
 import net.mcft.copy.core.proxy.CommonProxy;
+import net.mcft.copy.core.tweak.TweakAutoReplace;
 
 import org.apache.logging.log4j.Logger;
 
@@ -40,6 +41,8 @@ public class copycore {
 		proxy.init();
 		
 		config.save();
+		
+		TweakAutoReplace.instance.setEnabled(config.<Boolean>get(CoreConfig.tweakAutoReplace));
 		
 		channel = new NetworkChannel();
 		channel.register(0, Side.CLIENT, MessageSyncSettings.class);

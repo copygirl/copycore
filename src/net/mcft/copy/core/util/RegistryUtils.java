@@ -36,8 +36,9 @@ public final class RegistryUtils {
 			Config config, String category, boolean defaultEnabled, String comment,
 			T objectToRegister, Object... required) {
 		String name = objectToRegister.getName();
-		BooleanSetting setting = new BooleanSetting(config, category + "." + name, defaultEnabled).setComment(comment);
-		return (setting.getValue() ? registerIfEnabled(objectToRegister, required) : null);
+		// FIXME: Can't get a setting if it's not been loaded.
+		BooleanSetting setting = config.add(new BooleanSetting(category + "." + name, defaultEnabled).setComment(comment));
+		return (config.get(setting) ? registerIfEnabled(objectToRegister, required) : null);
 	}
 	/** Registers the object if it is enabled in the
 	 *  configuration and all required objects are enabled. */

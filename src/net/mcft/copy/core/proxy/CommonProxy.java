@@ -1,7 +1,7 @@
 package net.mcft.copy.core.proxy;
 
 import net.mcft.copy.core.copycore;
-import net.mcft.copy.core.config.Config;
+import net.mcft.copy.core.config.SyncedConfig;
 import net.mcft.copy.core.entity.EntityPropertiesBase;
 import net.mcft.copy.core.network.AbstractMessage;
 import net.mcft.copy.core.network.packet.MessageSyncSettings;
@@ -21,7 +21,7 @@ public class CommonProxy {
 	@SubscribeEvent
 	public void onPlayerLoggedIn(PlayerLoggedInEvent event) {
 		// Synchronize settings with newly joined players.
-		AbstractMessage packet = new MessageSyncSettings(Config.getAllConfigs());
+		AbstractMessage packet = new MessageSyncSettings(SyncedConfig.getAllConfigs());
 		copycore.channel.sendTo(packet, event.player);
 	}
 	
