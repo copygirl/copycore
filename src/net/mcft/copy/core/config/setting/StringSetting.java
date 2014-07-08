@@ -6,7 +6,7 @@ import net.minecraftforge.common.config.Property.Type;
 
 public class StringSetting extends SinglePropertySetting<String> {
 	
-	protected String[] validValues = null;
+	public String[] validValues = null;
 	
 	public StringSetting(String fullName, String defaultValue) {
 		super(fullName, defaultValue);

@@ -15,7 +15,8 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.relauncher.Side;
 
-@Mod(modid = copycore.MOD_ID, version = "@VERSION@")
+@Mod(modid = copycore.MOD_ID, version = "@VERSION@",
+     guiFactory = "net.mcft.copy.core.client.gui.CoreGuiFactory")
 public class copycore {
 	
 	public static final String MOD_ID = "copycore";

@@ -6,8 +6,8 @@ import net.minecraftforge.common.config.Property.Type;
 
 public class DoubleSetting extends SinglePropertySetting<Double> {
 	
-	protected double minValue = Double.MIN_VALUE;
-	protected double maxValue = Double.MAX_VALUE;
+	public double minValue = Double.MIN_VALUE;
+	public double maxValue = Double.MAX_VALUE;
 	
 	public DoubleSetting(String fullName, Double defaultValue) {
 		super(fullName, defaultValue);

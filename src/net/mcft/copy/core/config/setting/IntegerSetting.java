@@ -10,9 +10,9 @@ import org.apache.commons.lang3.ArrayUtils;
 
 public class IntegerSetting extends SinglePropertySetting<Integer> {
 	
-	protected int minValue = Integer.MIN_VALUE;
-	protected int maxValue = Integer.MAX_VALUE;
-	protected int[] validValues = null;
+	public int minValue = Integer.MIN_VALUE;
+	public int maxValue = Integer.MAX_VALUE;
+	public int[] validValues = null;
 	
 	public IntegerSetting(String fullName, Integer defaultValue) {
 		super(fullName, defaultValue);
