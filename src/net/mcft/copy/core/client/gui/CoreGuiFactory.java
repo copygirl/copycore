@@ -4,21 +4,26 @@ import java.util.Set;
 
 import net.mcft.copy.core.CoreConfig;
 import net.mcft.copy.core.copycore;
+import net.mcft.copy.core.tweak.TweakAutoReplace;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import cpw.mods.fml.client.IModGuiFactory;
-import cpw.mods.fml.client.config.GuiConfig;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class CoreGuiFactory implements IModGuiFactory {
 	
-	public static class CoreConfigGuiScreen extends GuiConfig {
+	public static class CoreConfigGuiScreen extends GuiConfigBase {
 		
 		public CoreConfigGuiScreen(GuiScreen parentScreen) {
-			super(parentScreen, GuiConfigHelper.getElementsFor(CoreConfig.class, copycore.MOD_ID),
-			      copycore.MOD_ID, false, false, copycore.MOD_ID);
+			super(parentScreen, copycore.MOD_ID, copycore.config);
+		}
+		
+		@Override
+		public void onConfigChanged() {
+			super.onConfigChanged();
+			TweakAutoReplace.instance.setEnabled(copycore.config.<Boolean>get(CoreConfig.tweakAutoReplace));
 		}
 		
 	}

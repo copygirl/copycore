@@ -11,4 +11,10 @@ public @interface ConfigSetting {
 	
 	String getConfigElementClass() default "";
 	
+	String getConfigEntryClass() default "";
+	
+	boolean requiresWorldRestart() default false;
+	
+	boolean requiresMinecraftRestart() default false;
+	
 }
