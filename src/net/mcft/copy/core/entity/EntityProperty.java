@@ -41,7 +41,8 @@ public abstract class EntityProperty<T> {
 	
 	/** Marks this property to be saved to the entity / disk. */
 	public EntityProperty<T> setSaved() { saved = true; return this; }
-	/** Marks this property to be synchronized with clients. */
+	/** Marks this property to be synchronized with clients. <br>
+	 *  If syncToAll is false, the property is only synced to the owning player entity. */
 	public EntityProperty<T> setSynced(boolean syncToAll) {
 		synced = true; this.syncToAll = syncToAll; return this; }
 	
