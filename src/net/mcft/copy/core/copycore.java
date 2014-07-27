@@ -37,8 +37,8 @@ public class copycore {
 		
 		proxy.init();
 		
-		config.save();
 		config.update();
+		config.save();
 		
 		channel = new NetworkChannel();
 		channel.register(0, Side.CLIENT, MessageSyncSettings.class);
