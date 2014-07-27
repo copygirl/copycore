@@ -5,6 +5,7 @@ import net.mcft.copy.core.network.packet.MessageOpenGui;
 import net.mcft.copy.core.network.packet.MessageSyncProperties;
 import net.mcft.copy.core.network.packet.MessageSyncSettings;
 import net.mcft.copy.core.proxy.CommonProxy;
+
 import org.apache.logging.log4j.Logger;
 
 import cpw.mods.fml.common.Mod;
