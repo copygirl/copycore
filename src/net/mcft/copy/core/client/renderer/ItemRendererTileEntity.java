@@ -72,6 +72,7 @@ public class ItemRendererTileEntity implements IItemRenderer {
 		if (tileEntity instanceof TileEntityBase)
 			((TileEntityBase)tileEntity).onRenderAsItem(item);
 		
+		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glPushMatrix();
 		
 		boolean equippedFirstPerson = (type == ItemRenderType.EQUIPPED_FIRST_PERSON);
@@ -96,7 +97,6 @@ public class ItemRendererTileEntity implements IItemRenderer {
 		renderer.renderTileEntityAt(tileEntity, -0.5, 0, -0.5, 1);
 		
 		GL11.glPopMatrix();
-		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 		
 	}
 	
