@@ -137,7 +137,7 @@ public abstract class GuiConfigBase extends GuiConfig {
 		
 		// Create and add category elements to the main config screen.
 		for (Map.Entry<String, List<IConfigElement>> entry : categoryMap.entrySet())
-			list.add(new CategoryElement(entry.getKey(), modId.toLowerCase() + ".config.category." + entry.getKey(), entry.getValue()));
+			list.add(new CategoryElement(entry.getKey(), "config." + modId.toLowerCase() + ".category." + entry.getKey(), entry.getValue()));
 		
 		return list;
 	}
@@ -151,7 +151,7 @@ public abstract class GuiConfigBase extends GuiConfig {
 		public SettingConfigElement(Config config, Setting<T> setting, String modId,
 		                            boolean reqMinecraftRestart, boolean reqWorldRestart) {
 			super(setting.fullName, setting.defaultValue, getGuiType(setting),
-			      modId.toLowerCase() + ".config." + setting.fullName,
+			      "config." + modId.toLowerCase() + "." + setting.fullName,
 			      getValidValues(setting), null, getMinValue(setting), getMaxValue(setting));
 			this.config = config;
 			this.setting = setting;

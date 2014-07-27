@@ -1,4 +1,4 @@
-copycore.config.category.tweaks=Tweak Settings
-copycore.config.category.tweaks.tooltip=Various tweak settings
-copycore.config.tweaks.autoReplace=Automatic Stack Replacement
-copycore.config.tweaks.autoReplace.tooltip=When enabled, used up items and stacks will get replaced by ones above in the same column.
+config.copycore.category.tweaks=Tweak Settings
+config.copycore.category.tweaks.tooltip=Various tweak settings
+config.copycore.tweaks.autoReplace=Automatic Stack Replacement
+config.copycore.tweaks.autoReplace.tooltip=When enabled, used up items and stacks will get replaced by ones above in the same column.
