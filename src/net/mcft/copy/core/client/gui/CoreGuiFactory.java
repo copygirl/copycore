@@ -2,9 +2,7 @@ package net.mcft.copy.core.client.gui;
 
 import java.util.Set;
 
-import net.mcft.copy.core.CoreConfig;
 import net.mcft.copy.core.copycore;
-import net.mcft.copy.core.tweak.TweakAutoReplace;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import cpw.mods.fml.client.IModGuiFactory;
@@ -18,12 +16,6 @@ public class CoreGuiFactory implements IModGuiFactory {
 		
 		public CoreConfigGuiScreen(GuiScreen parentScreen) {
 			super(parentScreen, copycore.MOD_ID, copycore.config);
-		}
-		
-		@Override
-		public void onConfigChanged() {
-			super.onConfigChanged();
-			TweakAutoReplace.instance.setEnabled(copycore.config.<Boolean>get(CoreConfig.tweakAutoReplace));
 		}
 		
 	}

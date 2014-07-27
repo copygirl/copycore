@@ -18,4 +18,9 @@ public class CoreConfig extends Config {
 		addAllViaReflection();
 	}
 	
+	@Override
+	public void update() {
+		TweakAutoReplace.instance.setEnabled(copycore.config.<Boolean>get(CoreConfig.tweakAutoReplace));
+	}
+	
 }

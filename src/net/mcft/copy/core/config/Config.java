@@ -93,6 +93,16 @@ public class Config implements IConfig {
 		}
 	}
 	
+	/** Called when something in the config was changed.
+	 *  Updates affected objects and saves changes to disk. */
+	public void onConfigChanged() {
+		save();
+		update();
+	}
+	
+	/** Updates affected objects when config was loaded or changed. */
+	public void update() {  }
+	
 	
 	private static class ModifiedConfiguration extends Configuration {
 		private static boolean preventLoad = false;

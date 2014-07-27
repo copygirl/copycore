@@ -61,13 +61,8 @@ public abstract class GuiConfigBase extends GuiConfig {
 	@SubscribeEvent
 	public final void onConfigChangedEvent(OnConfigChangedEvent event) {
 		if ((event.modID == modID) &&
-		    (event.configID == configID)) onConfigChanged();
-	}
-	
-	/** Called when something in the config was changed.
-	 *  Saves changes to the config file. */
-	public void onConfigChanged() {
-		config.save();
+		    (event.configID == configID))
+			config.onConfigChanged();
 	}
 	
 	/** Gets the config entry for a setting in this GUI. */
