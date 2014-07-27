@@ -2,3 +2,5 @@ config.copycore.category.tweaks=Tweak Settings
 config.copycore.category.tweaks.tooltip=Various tweak settings
 config.copycore.tweaks.autoReplace=Automatic Stack Replacement
 config.copycore.tweaks.autoReplace.tooltip=When enabled, used up items and stacks will get replaced by ones above in the same column.
+config.copycore.tweaks.playerDeathitemDespawnTime=Player Death Item Despawn Time
+config.copycore.tweaks.playerDeathitemDespawnTime.tooltip=The time in seconds items will stay in the world when dropped from a player death. Use -1 to disable the tweak.
