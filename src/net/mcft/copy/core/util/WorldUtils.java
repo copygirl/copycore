@@ -62,5 +62,10 @@ public final class WorldUtils {
 		}
 		return item;
 	}
+	/** Spawns multiple ItemStacks as if they were dropped from an entity on death. */
+	public static void dropStacksFromEntity(Entity entity, Iterable<ItemStack> stacks, float speed) {
+		for (ItemStack stack : stacks)
+			dropStackFromEntity(entity, stack, speed);
+	}
 	
 }
