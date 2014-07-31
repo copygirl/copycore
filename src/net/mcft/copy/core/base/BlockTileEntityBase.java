@@ -2,7 +2,11 @@ package net.mcft.copy.core.base;
 
 import java.util.ArrayList;
 
+import cpw.mods.fml.common.registry.GameRegistry;
+
 import net.mcft.copy.core.misc.BlockLocation;
+import net.mcft.copy.core.util.RegistryUtils;
+import net.mcft.copy.core.util.RegistryUtils.IRegistrable;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
@@ -98,6 +102,20 @@ public abstract class BlockTileEntityBase extends BlockBase implements ITileEnti
 		try { return getTileEntityClass().newInstance(); }
 		catch (Exception e) {  }
 		return tileEntity;
+	}
+	
+	// IRegistrable
+	
+	@Override
+	public <T extends IRegistrable> T register() {
+		super.register();
+		registerTileEntity();
+		return (T)this;
+	}
+	
+	protected void registerTileEntity() {
+		GameRegistry.registerTileEntity(getTileEntityClass(),
+				RegistryUtils.getActiveModId() + ":" + getName());
 	}
 	
 }
