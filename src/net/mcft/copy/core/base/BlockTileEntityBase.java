@@ -2,8 +2,6 @@ package net.mcft.copy.core.base;
 
 import java.util.ArrayList;
 
-import cpw.mods.fml.common.registry.GameRegistry;
-
 import net.mcft.copy.core.misc.BlockLocation;
 import net.mcft.copy.core.util.RegistryUtils;
 import net.mcft.copy.core.util.RegistryUtils.IRegistrable;
@@ -15,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 public abstract class BlockTileEntityBase extends BlockBase implements ITileEntityProvider {
 	

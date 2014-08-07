@@ -1,14 +1,12 @@
 package net.mcft.copy.core.client.gui;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import net.mcft.copy.core.config.Config;
-import net.mcft.copy.core.config.ConfigSetting;
+import net.mcft.copy.core.config.SettingInfo;
 import net.mcft.copy.core.config.setting.BooleanSetting;
 import net.mcft.copy.core.config.setting.DoubleSetting;
 import net.mcft.copy.core.config.setting.EnumSetting;
@@ -88,42 +86,32 @@ public abstract class GuiConfigBase extends GuiConfig {
 		Map<String, List<IConfigElement>> categoryMap = new HashMap<String, List<IConfigElement>>();
 		
 		// Get all static setting fields from the config class.
-		for (Field field : config.getClass().getFields())
-			if (Modifier.isStatic(field.getModifiers()) &&
-			    (field.getType().isAssignableFrom(Setting.class))) {
-				
-				Setting setting;
-				try { setting = (Setting)field.get(null); }
-				catch (Exception ex) { throw new RuntimeException(ex); }
-				
-				ConfigSetting annotation = field.getAnnotation(ConfigSetting.class);
-				String configElementClassName = ((annotation != null) ? annotation.getConfigElementClass() : "");
-				boolean reqMinecraftRestart = ((annotation != null) && annotation.requiresMinecraftRestart());
-				boolean reqWorldRestart = (reqMinecraftRestart || ((annotation != null) && annotation.requiresWorldRestart()));
-				
+		for (SettingInfo info : config.getSettingInfos())
+			if (info.showInConfigGui) {
 				IConfigElement configElement;
 				// If the setting doesn't have a ConfigSetting annotation or its
 				// custom config element class was not set, use the default one.
-				if (configElementClassName.isEmpty()) {
-					String configEntryClassName = ((annotation != null) ? annotation.getConfigEntryClass() : "");
+				if (info.configElementClass.isEmpty()) {
 					Class<? extends IConfigEntry> entryClass = null;
 					try {
-						if (!configEntryClassName.isEmpty())
-							entryClass = (Class<? extends IConfigEntry>)Class.forName(configEntryClassName);
+						if (!info.configEntryClass.isEmpty())
+							entryClass = (Class<? extends IConfigEntry>)Class.forName(info.configEntryClass);
 					} catch (Exception ex) { throw new RuntimeException(ex); }
-					configElement = new SettingConfigElement(config, setting, modId, reqMinecraftRestart, reqWorldRestart).setConfigEntryClass(entryClass);
+					configElement = new SettingConfigElement(config, info.setting, modId,
+							info.requiresMinecraftRestart, info.requiresWorldRestart).setConfigEntryClass(entryClass);
 				// Otherwise try to instantiate the custom config element.
 				} else try {
-					configElement = (IConfigElement)Class.forName(configElementClassName).getConstructor(
+					configElement = (IConfigElement)Class.forName(info.configElementClass).getConstructor(
 							Config.class, Setting.class, String.class, boolean.class, boolean.class)
-							.newInstance(config, setting, modId, reqMinecraftRestart, reqWorldRestart);
+							.newInstance(config, info.setting, modId,
+							             info.requiresMinecraftRestart, info.requiresWorldRestart);
 				} catch (Exception ex) { throw new RuntimeException(ex); }
 				
 				// If the setting's category is not "general", add it to the category map.
-				if (!setting.category.equals("general")) {
+				if (!info.setting.category.equals("general")) {
 					List<IConfigElement> categoryList;
-					if ((categoryList = categoryMap.get(setting.category)) == null)
-						categoryMap.put(setting.category, (categoryList = new ArrayList<IConfigElement>()));
+					if ((categoryList = categoryMap.get(info.setting.category)) == null)
+						categoryMap.put(info.setting.category, (categoryList = new ArrayList<IConfigElement>()));
 					categoryList.add(configElement);
 				// Otherwise just add it to the main config screen.
 				} else list.add(configElement);

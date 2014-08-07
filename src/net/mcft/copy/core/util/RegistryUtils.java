@@ -2,8 +2,7 @@ package net.mcft.copy.core.util;
 
 import java.util.Arrays;
 
-import net.mcft.copy.core.config.Config;
-import net.mcft.copy.core.config.setting.BooleanSetting;
+import net.mcft.copy.core.config.ContentConfig;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.LoaderState;
 
@@ -23,45 +22,12 @@ public final class RegistryUtils {
 	public static boolean isEnabled(Object... required) {
 		return !Arrays.asList(required).contains(null);
 	}
-
-	/** Registers the object if all required objects are enabled. */
-	public static <T extends IRegistrable> T registerIfEnabled(
-			T objectToRegister, Object... required) {
-		return (isEnabled(required) ? (T)objectToRegister.register() : null);
-	}
 	
-	/** Registers the object if it is enabled in the
-	 *  configuration and all required objects are enabled. */
-	public static <T extends IRegistrable> T registerIfEnabled(
-			Config config, String category, boolean defaultEnabled, String comment,
-			T objectToRegister, Object... required) {
-		String name = objectToRegister.getName();
-		// FIXME: Can't get a setting if it's not been loaded.
-		BooleanSetting setting = config.add(new BooleanSetting(category + "." + name, defaultEnabled).setComment(comment));
-		return (config.get(setting) ? registerIfEnabled(objectToRegister, required) : null);
+	/** Registers this object if it's enabled in the config
+	 *  and all required objects are enabled as well. */
+	public static <T extends IRegistrable> T registerIfEnabled(T object, ContentConfig config, Object... required) {
+		return ((isEnabled(required) && config.isEnabled(object)) ? object.<T>register() : null);
 	}
-	/** Registers the object if it is enabled in the
-	 *  configuration and all required objects are enabled. */
-	public static <T extends IRegistrable> T registerIfEnabled(
-			Config config, String category, boolean defaultEnabled,
-			T objectToRegister, Object... required) {
-		return registerIfEnabled(config, category, defaultEnabled, null, objectToRegister, required);
-	}
-	/** Registers the object if it is enabled in the
-	 *  configuration and all required objects are enabled. */
-	public static <T extends IRegistrable> T registerIfEnabled(
-			Config config, String category, String comment,
-			T objectToRegister, Object... required) {
-		return registerIfEnabled(config, category, true, comment, objectToRegister, required);
-	}
-	/** Registers the object if it is enabled in the
-	 *  configuration and all required objects are enabled. */
-	public static <T extends IRegistrable> T registerIfEnabled(
-			Config config, String category,
-			T objectToRegister, Object... required) {
-		return registerIfEnabled(config, category, true, null, objectToRegister, required);
-	}
-	
 	
 	public static interface IRegistrable {
 		

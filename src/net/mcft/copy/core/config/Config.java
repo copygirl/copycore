@@ -3,8 +3,10 @@ package net.mcft.copy.core.config;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import net.mcft.copy.core.copycore;
@@ -19,6 +21,8 @@ public class Config implements IConfig {
 	private final Map<Setting, Object> settingValues = new HashMap<Setting, Object>();
 	private final Map<String, String> categoryComments = new HashMap<String, String>();
 	
+	private final List<SettingInfo> settings = new ArrayList<SettingInfo>();
+	
 	public Config(File file) {
 		this.file = file;
 		forgeConfig = new ModifiedConfiguration(file);
@@ -31,8 +35,10 @@ public class Config implements IConfig {
 	public <T> void set(Setting<T> setting, T value) { settingValues.put(setting, value); }
 	
 	/** Adds a setting to the config. */
-	public <T extends Setting> T add(T setting) {
+	public <T> Setting<T> add(SettingInfo<T> settingInfo) {
+		Setting<T> setting = settingInfo.setting;
 		settingValues.put(setting, setting.defaultValue);
+		settings.add(settingInfo);
 		return setting;
 	}
 	
@@ -40,16 +46,15 @@ public class Config implements IConfig {
 	public void addAllViaReflection() {
 		for (Field field : getClass().getFields())
 			if (Modifier.isStatic(field.getModifiers()) &&
-			    (field.getType().isAssignableFrom(Setting.class))) {
-				try { add((Setting)field.get(null)); }
-				catch (Exception ex) { throw new RuntimeException(ex); }
-			}
+			    (field.getType().isAssignableFrom(Setting.class)))
+				add(new SettingInfo(field));
 	}
 	
 	/** Returns a collection of all settings in this config. */
-	public Collection<Setting> getSettings() {
-		return settingValues.keySet();
-	}
+	public Collection<Setting> getSettings() { return settingValues.keySet(); }
+	
+	/** Returns a collection of all setting infos in this config. */
+	public Collection<SettingInfo> getSettingInfos() { return settings; }
 	
 	/** Adds a custom comment to a category. */
 	public void addCategoryComment(String category, String comment) {
