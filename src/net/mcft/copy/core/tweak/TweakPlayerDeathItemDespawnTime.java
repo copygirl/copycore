@@ -16,12 +16,12 @@ public final class TweakPlayerDeathItemDespawnTime extends Tweak {
 	private TweakPlayerDeathItemDespawnTime() {  }
 	
 	@Override
-	public void enable() {
+	protected void enable() {
 		MinecraftForge.EVENT_BUS.register(this);
 	}
 	
 	@Override
-	public void disable() {
+	protected void disable() {
 		MinecraftForge.EVENT_BUS.unregister(this);
 	}
 	

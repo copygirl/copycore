@@ -19,12 +19,12 @@ public final class TweakAutoReplace extends Tweak {
 	private TweakAutoReplace() {  }
 	
 	@Override
-	public void enable() {
+	protected void enable() {
 		MinecraftForge.EVENT_BUS.register(this);
 	}
 	
 	@Override
-	public void disable() {
+	protected void disable() {
 		MinecraftForge.EVENT_BUS.unregister(this);
 	}
 	
