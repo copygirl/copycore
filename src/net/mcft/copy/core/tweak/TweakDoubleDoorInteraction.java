@@ -1,5 +1,6 @@
 package net.mcft.copy.core.tweak;
 
+import net.mcft.copy.core.misc.BlockLocation;
 import net.minecraft.block.BlockDoor;
 import net.minecraft.init.Blocks;
 import net.minecraftforge.common.MinecraftForge;
@@ -27,27 +28,39 @@ public class TweakDoubleDoorInteraction extends Tweak {
 	@SubscribeEvent(priority=EventPriority.LOW)
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		BlockDoor door = (BlockDoor)Blocks.wooden_door;
-		int x = event.x, y = event.y, z = event.z;
+		BlockLocation loc = BlockLocation.get(event.world, event.x, event.y, event.z);
+		
 		if ((event.action != Action.RIGHT_CLICK_BLOCK) ||
-			!(event.world.getBlock(x, y, z) == door) ||
-		    event.entityPlayer.isSneaking()) return;
+		    event.entityPlayer.isSneaking() ||
+		    !(loc.getBlock() == door)) return;
 		
-		int direction = door.func_150013_e(event.world, x, y, z);
-		boolean open = door.func_150015_f(event.world, x, y, z);
-		boolean mirror = ((door.func_150012_g(event.world, x, y, z) & 16) != 0);
+		int direction = getDoorOrientation(door, loc);
+		boolean isOpen = isDoorOpen(door, loc);
+		boolean isMirrored = isDoorMirrored(door, loc);
 		
+		int i = (isMirrored ? -1 : 1);
 		switch (direction) {
-			case 0: z -= (mirror ? 1 : -1); break;
-			case 1: x += (mirror ? 1 : -1); break;
-			case 2: z += (mirror ? 1 : -1); break;
-			case 3: x -= (mirror ? 1 : -1); break;
+			case 0: loc = loc.relative(0, 0,  i); break;
+			case 1: loc = loc.relative(-i, 0, 0); break;
+			case 2: loc = loc.relative(0, 0, -i); break;
+			case 3: loc = loc.relative( i, 0, 0); break;
 		}
 		
-		if ((event.world.getBlock(x, y, z) == door) &&
-		    (door.func_150013_e(event.world, x, y, z) == direction) &&
-		    (door.func_150015_f(event.world, x, y, z) == open) &&
-		    (((door.func_150012_g(event.world, x, y, z) & 16) != 0) != mirror))
-			door.onBlockActivated(event.world, x, y, z, event.entityPlayer, event.face, 0, 0, 0);
+		if ((loc.getBlock() == door) &&
+		    (getDoorOrientation(door, loc) == direction) &&
+		    (isDoorOpen(door, loc) == isOpen) &&
+		    (isDoorMirrored(door, loc) != isMirrored))
+			door.onBlockActivated(loc.world, loc.x, loc.y, loc.z, event.entityPlayer, event.face, 0, 0, 0);
+	}
+	
+	private int getDoorOrientation(BlockDoor door, BlockLocation loc) {
+		return door.func_150013_e(loc.blockAccess, loc.x, loc.y, loc.z);
+	}
+	private boolean isDoorOpen(BlockDoor door, BlockLocation loc) {
+		return door.func_150015_f(loc.blockAccess, loc.x, loc.y, loc.z);
+	}
+	private boolean isDoorMirrored(BlockDoor door, BlockLocation loc) {
+		return ((door.func_150012_g(loc.blockAccess, loc.x, loc.y, loc.z) & 16) != 0);
 	}
 	
 }
