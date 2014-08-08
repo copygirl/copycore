@@ -1,0 +1,8 @@
+config.copycore.category.tweaks=Paramètres des tweaks
+config.copycore.category.tweaks.tooltip=Divers paramètres de personalisation des tweaks
+config.copycore.tweaks.autoReplace=Remplacement des stacks
+config.copycore.tweaks.autoReplace.tooltip=Lorsque cette option est activée, les items et les stacks seront remplacée par celui-ci dans la même colonne.
+config.copycore.tweaks.playerDeathitemDespawnTime=Items et mort du joueur
+config.copycore.tweaks.playerDeathitemDespawnTime.tooltip=Le temps en secondes où l'item restera dans le monde en cas de chute lors de la mort d'un joueur. Utilisez -1 pour désactiver le tweak.
+config.copycore.tweaks.doubleDoorInteraction=Interaction avec les doubles portes
+config.copycore.tweaks.doubleDoorInteraction.tooltip=Lorsque cette option est activée, l'interaction avec une double porte en bois ouvre les deux portes en même temps.
