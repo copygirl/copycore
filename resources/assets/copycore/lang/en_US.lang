@@ -4,3 +4,5 @@ config.copycore.tweaks.autoReplace=Automatic Stack Replacement
 config.copycore.tweaks.autoReplace.tooltip=When enabled, used up items and stacks will get replaced by ones above in the same column.
 config.copycore.tweaks.playerDeathitemDespawnTime=Player Death Item Despawn Time
 config.copycore.tweaks.playerDeathitemDespawnTime.tooltip=The time in seconds items will stay in the world when dropped from a player death. Use -1 to disable the tweak.
+config.copycore.tweaks.doubleDoorInteraction=Double Door Interaction
+config.copycore.tweaks.doubleDoorInteraction.tooltip=When enabled, interacting with a wooden double door opens both doors at once.
