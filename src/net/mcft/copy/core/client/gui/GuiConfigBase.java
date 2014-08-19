@@ -60,7 +60,7 @@ public abstract class GuiConfigBase extends GuiConfig {
 	public final void onConfigChangedEvent(OnConfigChangedEvent event) {
 		if ((event.modID == modID) &&
 		    (event.configID == configID))
-			config.onConfigChanged();
+			config.save();
 	}
 	
 	/** Gets the config entry for a setting in this GUI. */

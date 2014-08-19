@@ -8,12 +8,13 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import net.mcft.copy.core.copycore;
 import net.mcft.copy.core.config.setting.Setting;
 import net.minecraftforge.common.config.Configuration;
 
-public class Config implements IConfig {
+public class Config extends AbstractConfig {
 	
 	private final File file;
 	private final Configuration forgeConfig;
@@ -28,17 +29,12 @@ public class Config implements IConfig {
 		forgeConfig = new ModifiedConfiguration(file);
 	}
 	
-	@Override
-	public <T> T get(Setting<T> setting) { return (T)settingValues.get(setting); }
-	
-	/** Sets the value of the setting in this config. */
-	public <T> void set(Setting<T> setting, T value) { settingValues.put(setting, value); }
-	
 	/** Adds a setting to the config. */
 	public <T> Setting<T> add(SettingInfo<T> settingInfo) {
 		Setting<T> setting = settingInfo.setting;
 		settingValues.put(setting, setting.defaultValue);
 		settings.add(settingInfo);
+		onSettingChanged(setting, setting.defaultValue);
 		return setting;
 	}
 	
@@ -50,7 +46,17 @@ public class Config implements IConfig {
 				add(new SettingInfo(field));
 	}
 	
-	/** Returns a collection of all settings in this config. */
+	@Override
+	public <T> T get(Setting<T> setting) { return (T)settingValues.get(setting); }
+	
+	/** Sets the value of the setting in this config. */
+	public <T> void set(Setting<T> setting, T value) {
+		if (Objects.equals(get(setting), value)) return;
+		settingValues.put(setting, value);
+		onSettingChanged(setting, value);
+	}
+	
+	@Override
 	public Collection<Setting> getSettings() { return settingValues.keySet(); }
 	
 	/** Returns a collection of all setting infos in this config. */
@@ -69,9 +75,18 @@ public class Config implements IConfig {
 	/** Loads settings from the config file. */
 	public void load() {
 		forgeConfig.load();
-		for (Map.Entry<Setting, Object> entry : settingValues.entrySet())
-			entry.setValue(entry.getKey().load(forgeConfig));
-		validate();
+		for (Map.Entry<Setting, Object> entry : settingValues.entrySet()) {
+			Setting setting = entry.getKey();
+			Object value = setting.load(forgeConfig);
+			String validationError = setting.validate(value);
+			if (validationError != null) {
+				value = setting.defaultValue;
+				copycore.log.warn(String.format(
+						"Config setting %s in %s is invalid: %s. Using default value: %s.",
+						setting, file.getName(), validationError, value));
+			}
+			set(setting, value);
+		}
 	}
 	
 	/** Saves settings to the config file. */
@@ -82,32 +97,6 @@ public class Config implements IConfig {
 			forgeConfig.setCategoryComment(entry.getKey(), entry.getValue());
 		forgeConfig.save();
 	}
-	
-	/** Validates all settings. Invalid settings print
-	 *  a warning and use the default value instead. */
-	public void validate() {
-		for (Map.Entry<Setting, Object> entry : settingValues.entrySet()) {
-			Setting setting = entry.getKey();
-			String message = setting.validate(entry.getValue());
-			if (message != null) {
-				entry.setValue(setting.defaultValue);
-				copycore.log.warn(String.format(
-						"Config setting {} in {} is invalid: {}. Using default value: {}.",
-						setting, file.getName(), message, setting.defaultValue));
-			}
-		}
-	}
-	
-	/** Called when something in the config was changed.
-	 *  Updates affected objects and saves changes to disk. */
-	public void onConfigChanged() {
-		update();
-		save();
-	}
-	
-	/** Updates affected objects when config was loaded or changed. */
-	public void update() {  }
-	
 	
 	private static class ModifiedConfiguration extends Configuration {
 		private static boolean preventLoad = false;

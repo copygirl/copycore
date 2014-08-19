@@ -15,7 +15,7 @@ public class CoreGuiFactory implements IModGuiFactory {
 	public static class CoreConfigGuiScreen extends GuiConfigBase {
 		
 		public CoreConfigGuiScreen(GuiScreen parentScreen) {
-			super(parentScreen, copycore.MOD_ID, copycore.config);
+			super(parentScreen, copycore.MOD_ID, copycore.globalConfig);
 		}
 		
 	}

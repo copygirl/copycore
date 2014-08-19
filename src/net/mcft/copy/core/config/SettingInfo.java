@@ -18,8 +18,10 @@ public class SettingInfo<T> {
 	public SettingInfo(Setting<T> setting, boolean requiresWorldRestart, boolean requiresMinecraftRestart,
 	                   boolean showInConfigGui, String configElementClass, String configEntryClass) {
 		this.setting = setting;
+		
 		this.requiresWorldRestart = requiresWorldRestart;
 		this.requiresMinecraftRestart = requiresMinecraftRestart;
+		
 		this.showInConfigGui = showInConfigGui;
 		this.configElementClass = configElementClass;
 		this.configEntryClass = configEntryClass;
@@ -29,18 +31,19 @@ public class SettingInfo<T> {
 	}
 	
 	public SettingInfo(Field field) {
-		try {
-			setting = (Setting<T>)field.get(null);
-			
-			ConfigSetting annotation = field.getAnnotation(ConfigSetting.class);
-			
-			requiresMinecraftRestart = ((annotation != null) && annotation.requiresMinecraftRestart());
-			requiresWorldRestart     = (requiresMinecraftRestart || ((annotation != null) && annotation.requiresWorldRestart()));
-			
-			showInConfigGui = true;
-			configElementClass = ((annotation != null) ? annotation.getConfigElementClass() : "");
-			configEntryClass   = ((annotation != null) ? annotation.getConfigEntryClass() : "");
-		} catch (Exception e) { throw new RuntimeException(e); }
+		try { setting = (Setting<T>)field.get(null); }
+		catch (Exception e) { throw new RuntimeException(e); }
+		
+		ConfigSetting annotation = field.getAnnotation(ConfigSetting.class);
+		
+		requiresMinecraftRestart = ((annotation != null) && annotation.requiresMinecraftRestart());
+		requiresWorldRestart     = (requiresMinecraftRestart || ((annotation != null) && annotation.requiresWorldRestart()));
+		
+		showInConfigGui = true;
+		configElementClass = ((annotation != null) ? annotation.getConfigElementClass() : "");
+		configEntryClass   = ((annotation != null) ? annotation.getConfigEntryClass() : "");
 	}
+	
+	
 	
 }
