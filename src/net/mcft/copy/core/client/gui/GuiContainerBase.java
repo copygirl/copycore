@@ -17,12 +17,12 @@ public class GuiContainerBase extends GuiContainer {
 	public static final GuiTextureResource generic9by6 =
 			new GuiTextureResource(copycore.MOD_ID, "generic_9x6", 256, 256);
 	
-	public String title;
+	public final ContainerBase container;
 	public Padding padding = new Padding(7, 16, 7, 7);
 	
 	public GuiContainerBase(ContainerBase container) {
 		super(container);
-		this.title = container.getTitleLocalized();
+		this.container = container;
 	}
 	
 	@Override
@@ -34,10 +34,16 @@ public class GuiContainerBase extends GuiContainer {
 		ySize = getHeight();
 	}
 	
+	/** Returns the titel of the GUI. */
+	public String getTitle() { return container.getTitleLocalized(); }
+	
 	/** Returns the total width of the GUI. */
 	public int getWidth() { return (9 * 18 + padding.left + padding.right); }
 	/** Returns the total height of the GUI. */
-	public int getHeight() { return (4 * 18 + 90 + padding.top + padding.bottom); }
+	public int getHeight() {
+		return (container.getHeight() + container.getSeparation() +
+		        76 + padding.top + padding.bottom);
+	}
 	
 	/** Returns the total width of the screen. */
 	public int getScreenWidth() { return width; }
@@ -51,7 +57,7 @@ public class GuiContainerBase extends GuiContainer {
 	
 	@Override
 	protected void drawGuiContainerForegroundLayer(int par1, int par2) {
-		fontRendererObj.drawString(title, 8, 6, 0x404040);
+		fontRendererObj.drawString(getTitle(), 8, 6, 0x404040);
 		fontRendererObj.drawString(StatCollector.translateToLocal("container.inventory"), 8, ySize - 93, 0x404040);
 	}
 	
