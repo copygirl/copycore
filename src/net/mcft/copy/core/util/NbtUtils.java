@@ -103,7 +103,7 @@ public final class NbtUtils {
 	/** Reads items from an NBT list to an item stack array.
 	 *  Any items falling outside the range of the items array
 	 *  will get added to the invalid list if that's non-null. */
-	public static void readItems(NBTTagList list, ItemStack[] items, List<ItemStack> invalid) {
+	public static ItemStack[] readItems(NBTTagList list, ItemStack[] items, List<ItemStack> invalid) {
 		for (int i = 0; i < list.tagCount(); i++) {
 			NBTTagCompound compound = list.getCompoundTagAt(i);
 			int index = compound.getShort(TAG_INDEX);
@@ -113,10 +113,11 @@ public final class NbtUtils {
 			else if (invalid != null)
 				invalid.add(stack);
 		}
+		return items;
 	}
 	/** Reads items from an NBT list to an item stack array. */
-	public static void readItems(NBTTagList list, ItemStack[] items) {
-		readItems(list, items, null);
+	public static ItemStack[] readItems(NBTTagList list, ItemStack[] items) {
+		return readItems(list, items, null);
 	}
 	
 }
