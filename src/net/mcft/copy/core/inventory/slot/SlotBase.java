@@ -19,7 +19,8 @@ public class SlotBase extends Slot {
 	
 	/** Returns if the player can set the slot to this stack. */
 	public boolean isItemValid(EntityPlayer player, ItemStack stack) {
-		return ((stack == null) || (stack.stackSize <= getSlotStackLimit()));
+		return (inventory.isItemValidForSlot(getSlotIndex(), stack) &&
+		        ((stack == null) || (stack.stackSize <= getSlotStackLimit())));
 	}
 	
 	/** Returns the maximum amount of items of this
@@ -50,7 +51,7 @@ public class SlotBase extends Slot {
 		int amount = Math.min(insert.stackSize, getMaxStackSize(insert) - stackSize);
 		if (amount <= 0) return insert;
 		stack = StackUtils.copy(insert, stackSize + amount);
-		if (!isItemValid(player, stack)) return null;
+		if (!isItemValid(player, stack)) return insert;
 		putStack(stack);
 		return StackUtils.copy(insert, insert.stackSize - amount);
 	}
