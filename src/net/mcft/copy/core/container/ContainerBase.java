@@ -20,7 +20,6 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryBasic;
-import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
@@ -48,8 +47,6 @@ public class ContainerBase extends Container {
 	protected SlotGroup containerInventorySlots;
 	protected SlotGroup playerInventorySlots;
 	protected SlotGroup playerHotbarSlots;
-	
-	private int hotbarStart = -1;
 	
 	private List<SlotGroup> groups = new ArrayList<SlotGroup>();
 	private List<SlotGroup> groupLookup = new ArrayList<SlotGroup>();
@@ -158,15 +155,6 @@ public class ContainerBase extends Container {
 	
 	// Slot / SlotGroup related functions
 	
-	@Override
-	protected Slot addSlotToContainer(Slot slot) {
-		// Detect start of player hotbar.
-		if ((slot.inventory == player.inventory) &&
-		    (slot.getSlotIndex() == 0))
-			hotbarStart = slot.slotNumber;
-		return super.addSlotToContainer(slot);
-	}
-	
 	/** Adds a slot group along with its slots to this container.
 	 *  Returns the group. */
 	public SlotGroup addGroup(SlotGroup group) {
@@ -237,12 +225,10 @@ public class ContainerBase extends Container {
 				return transferStackInSlot(player, slotId);
 			else if ((special == 2) && (button >= 0) && (button < 9)) {
 				// Override default hotbar switching to make sure
-				// the items can be taken and put into those slots.
-				if (hotbarStart < 0) return null;
-				Slot slot2 = (Slot)inventorySlots.get(hotbarStart + button);
-				if (!slot2.canTakeStack(player) ||
-				    ((stack != null) && !slot2.isItemValid(stack)))
-					return null;
+				// the items can be taken and put into those slots
+				SlotBase slot2 = playerHotbarSlots.slots.get(button);
+				if (!slot.canTakeStack(player) ||
+				    !slot2.isItemValid(player, stack)) return null;
 			}
 		}
 		return super.slotClick(slotId, button, special, player);
