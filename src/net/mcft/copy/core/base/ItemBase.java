@@ -30,7 +30,7 @@ public class ItemBase extends Item implements IRegistrable {
 	/** Registers the item in the GameRegistry, as well as sets the item name. */
 	@Override
 	public <T extends IRegistrable> T register() {
-		setUnlocalizedName(getName());
+		setUnlocalizedName(RegistryUtils.getActiveModId().toLowerCase() + "." + getName());
 		GameRegistry.registerItem(this, getName());
 		return (T)this;
 	}
