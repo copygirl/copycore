@@ -23,7 +23,7 @@ archivesBaseName = "copycore"
 
 minecraft {
     version = "1.7.10-10.13.0.1180"
-    
+
     replaceIn project.projectDir.name + ".java"
     replace "@VERSION@", project.version
 }
@@ -36,7 +36,7 @@ sourceSets.main {
 processResources {
     inputs.property "version", project.version
     inputs.property "mcversion", project.minecraft.version
-    
+
     from (sourceSets.main.resources.srcDirs) {
         include 'mcmod.info'
         expand 'version':project.version, 'mcversion':project.minecraft.version
@@ -51,6 +51,12 @@ task deobfJar(type: Jar) {
     classifier = 'deobf'
 }
 
+task sourcesJar(type: Jar, dependsOn: classes) {
+    from sourceSets.main.allSource
+    classifier = 'sources'
+}
+
 artifacts {
     archives deobfJar
+    archives sourcesJar
 }
