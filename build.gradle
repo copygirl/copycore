@@ -17,9 +17,9 @@ buildscript {
 
 apply plugin: 'forge'
 
-version = "1.5.0.6"
+version = "1.7.10-1.5.0.6"
 group = "net.mcft.copy.copycore"
-archivesBaseName = project.projectDir.name + "-1.7.10"
+archivesBaseName = "copycore"
 
 minecraft {
     version = "1.7.10-10.13.0.1180"
@@ -48,7 +48,7 @@ processResources {
 
 task deobfJar(type: Jar) {
     from sourceSets.main.output
-    classifier = 'dev'
+    classifier = 'deobf'
 }
 
 artifacts {
