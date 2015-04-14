@@ -2,6 +2,8 @@ package net.mcft.copy.core;
 
 import java.io.File;
 
+import net.mcft.copy.core.addon.Addons;
+import net.mcft.copy.core.addon.MineTweakerAddon;
 import net.mcft.copy.core.config.ISettingChangedHandler;
 import net.mcft.copy.core.config.PriorityConfig;
 import net.mcft.copy.core.config.PriorityConfig.Priority;
@@ -55,6 +57,8 @@ public class copycore {
 		channel.register(2, Side.CLIENT, MessageOpenGui.class);
 		
 		proxy.init();
+		
+		Addons.load(MineTweakerAddon.class);
 		
 	}
 	
