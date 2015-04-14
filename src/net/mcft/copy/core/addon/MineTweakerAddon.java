@@ -5,8 +5,6 @@ import stanhebben.zenscript.annotations.ZenMethod;
 import minetweaker.IUndoableAction;
 import minetweaker.MineTweakerAPI;
 import minetweaker.api.item.IItemStack;
-import net.mcft.copy.betterstorage.api.crafting.BetterStorageCrafting;
-import net.mcft.copy.betterstorage.api.crafting.IStationRecipe;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
