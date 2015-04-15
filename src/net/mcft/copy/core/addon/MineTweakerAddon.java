@@ -1,12 +1,12 @@
 package net.mcft.copy.core.addon;
 
-import stanhebben.zenscript.annotations.ZenClass;
-import stanhebben.zenscript.annotations.ZenMethod;
 import minetweaker.IUndoableAction;
 import minetweaker.MineTweakerAPI;
 import minetweaker.api.item.IItemStack;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import stanhebben.zenscript.annotations.ZenClass;
+import stanhebben.zenscript.annotations.ZenMethod;
 
 @Addon({ "MineTweaker3" })
 @ZenClass("mods.copycore.Tweaks")
@@ -20,8 +20,8 @@ public class MineTweakerAddon {
 	@ZenMethod
 	public static void setDurability(IItemStack item, int durability) {
 		Item i = getItemFromIItemStack(item);
-		if (!i.isDamageable())
-			throw new IllegalArgumentException("item isn't damegeable");
+		if (i.getHasSubtypes())
+			throw new IllegalArgumentException("item has sub-items");
 		MineTweakerAPI.apply(new SetDurabilityAction(i, durability));
 	}
 	@ZenMethod
@@ -42,7 +42,7 @@ public class MineTweakerAddon {
 	public static void setMaxStackSize(IItemStack item, int stackSize) {
 		Item i = getItemFromIItemStack(item);
 		if (i.isDamageable())
-			throw new IllegalArgumentException("item is damegeable");
+			throw new IllegalArgumentException("item is damageable");
 		MineTweakerAPI.apply(new SetMaxStackSizeAction(i, stackSize));
 	}
 	@ZenMethod
