@@ -1,5 +1,7 @@
 package net.mcft.copy.core.util;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Random;
 
 public final class RandomUtils {
@@ -28,5 +30,17 @@ public final class RandomUtils {
 	public static boolean getBoolean(double probability) { return (getDouble() < probability); }
 	
 	public static double getGaussian() { return random.nextGaussian(); }
+	
+	
+	public static <T>   T getElement(      T[] array) { return ((array.length > 0) ? array[getInt(array.length)] : null); }
+	public static boolean getElement(boolean[] array) { return ((array.length > 0) ? array[getInt(array.length)] : false); }
+	public static    byte getElement(   byte[] array) { return ((array.length > 0) ? array[getInt(array.length)] : 0); }
+	public static   short getElement(  short[] array) { return ((array.length > 0) ? array[getInt(array.length)] : 0); }
+	public static     int getElement(    int[] array) { return ((array.length > 0) ? array[getInt(array.length)] : 0); }
+	public static    long getElement(   long[] array) { return ((array.length > 0) ? array[getInt(array.length)] : 0); }
+	public static   float getElement(  float[] array) { return ((array.length > 0) ? array[getInt(array.length)] : 0); }
+	public static  double getElement( double[] array) { return ((array.length > 0) ? array[getInt(array.length)] : 0); }
+	
+	public static <T> T getElement (List<T> list) { return (!list.isEmpty() ? list.get(getInt(list.size())) : null); }
 	
 }
